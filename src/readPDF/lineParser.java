@@ -82,7 +82,7 @@ public class lineParser {
 
 						// System.out.println(trans13);
 						// System.out.println("Enter category");
-						// hashMap.put(trans13, "misc");
+						 hashMap.put(trans13, "misc");
 						String category = hashMap.get(trans13);
 						hashMap2.put(trans13, category);
 
@@ -104,7 +104,7 @@ public class lineParser {
 
 						// System.out.println(tran3);
 						// System.out.println("Enter category");
-						// hashMap.put(tran3, "misc");
+						 hashMap.put(tran3, "misc");
 						String category = hashMap.get(tran3);
 						hashMap2.put(tran3, category);
 
@@ -127,7 +127,7 @@ public class lineParser {
 						// System.out.println(trans4);
 						// System.out.println("Enter category");
 
-						// hashMap.put(trans4, "misc");
+						 hashMap.put(trans4, "misc");
 						String category = hashMap.get(trans4);
 						hashMap2.put(trans4, category);
 
@@ -158,7 +158,7 @@ public class lineParser {
 
 							// System.out.println(data33);
 							// System.out.println("Enter category");
-							// hashMap.put(data33, "misc");
+							 hashMap.put(data33, "misc");
 							String category = hashMap.get(data33);
 							hashMap2.put(data33, category);
 
@@ -170,7 +170,6 @@ public class lineParser {
 							csvFile.flush();
 							break;
 						} else if (!m2.find()) {
-							System.out.println(line);
 							continue;
 						}
 					}
