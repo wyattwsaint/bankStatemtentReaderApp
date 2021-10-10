@@ -16,7 +16,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.pdfbox.Loader;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 public class readPDF {
@@ -27,7 +28,7 @@ public class readPDF {
 		File file = new File("C:\\Users\\wmsai\\Desktop\\BankStatement.pdf");
 		PDFTextStripper stripper = new PDFTextStripper();
 		BufferedWriter bw = new BufferedWriter(new FileWriter("bankData", StandardCharsets.UTF_8));
-		String temp = stripper.getText(Loader.loadPDF(file)).toUpperCase();
+		String temp = stripper.getText(PDDocument.load(file)).toUpperCase();
 
 		bw.write(temp);
 		bw.flush();
