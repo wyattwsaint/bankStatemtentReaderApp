@@ -151,7 +151,7 @@ public class Main {
 		summary.put("misc", 0.00);
 		
 		//BufferedWriter csvFile = new BufferedWriter(new FileWriter("csvFile.csv", true));
-		String[] billNames = { "DFAS", "AMAZON", "PRIME VIDEO" };
+		String[] billNames = { "ROYAL FARMS" };
 		
 		int beginIdx = pdfText.indexOf("CHECKING  ID 0004");
 		int endIdx = pdfText.indexOf("SUMMER PAY SHARES  ID 0005");
