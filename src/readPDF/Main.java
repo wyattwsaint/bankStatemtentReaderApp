@@ -1,14 +1,20 @@
 package readPDF;
 
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.commons.collections4.IteratorUtils;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.google.gson.Gson;
+
+import readPDF.celleditor.CategoryEditor;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -24,13 +30,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.border.LineBorder;
@@ -38,9 +50,13 @@ import javax.swing.border.LineBorder;
 public class Main {
 
 	private JFrame frame;
+	private Category catFrame;
 	private JTable tblTransactions;
 	private JLabel lblSummary;
 	DefaultTableModel model;
+	PropertiesConfiguration config;
+	String[][] categoryData;
+	ArrayList<String> categories;
 
 	/**
 	 * Launch the application.
@@ -69,8 +85,30 @@ public class Main {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws ConfigurationException 
 	 */
 	private void initialize() {
+		categories = new ArrayList<String>();
+		
+		try {
+			config = new PropertiesConfiguration("categories.properties");
+			String catProp = config.getProperty("categories").toString();
+			categories.addAll(Arrays.asList(catProp.split(",")));
+			
+			categoryData = new String[categories.size()][2];
+			int idx = 0;
+			for(String category : categories) {
+				categoryData[idx][0] = category;
+				categoryData[idx][1] = StringUtils.join(config.getStringArray(category), ",");
+				idx++;
+			}
+			categories.add("misc");
+		
+		} catch (ConfigurationException e1) {
+			e1.printStackTrace();
+		}
+		
+		
 		frame = new JFrame("Saint Statements");
 		frame.setBounds(100, 100, 707, 481);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,6 +144,8 @@ public class Main {
 		tblTransactions = new JTable(model);
 		tblTransactions.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tblTransactions.setAutoCreateRowSorter(true);
+		tblTransactions.getColumnModel().getColumn(0).setCellEditor(new CategoryEditor(categories));
+		
 		JScrollPane scrollPane = new JScrollPane( tblTransactions );
 		
 		transactionPanel.add(scrollPane);
@@ -139,19 +179,27 @@ public class Main {
 		
 		frame.setVisible(true);
 		
+		
+		
 	}
 	
 	public void parseFile(File file) throws IOException, ParseException {
-
+        
 		PDFTextStripper stripper = new PDFTextStripper();
 		String pdfText = stripper.getText(PDDocument.load(file)).toUpperCase().replaceAll("\n", "");
 
 		HashMap<String, Double> summary = new HashMap<>();
+<<<<<<< HEAD
 		summary.put("bill", 0.00);
 		summary.put("misc", 0.00);
 		
 		//BufferedWriter csvFile = new BufferedWriter(new FileWriter("csvFile.csv", true));
 		String[] billNames = { "ROYAL FARMS" };
+=======
+		for(String cat : categories) {
+			summary.put(cat, 0.00);
+		}
+>>>>>>> b4353c5c084d18e5adb5c786b32c65b389488806
 		
 		int beginIdx = pdfText.indexOf("CHECKING  ID 0004");
 		int endIdx = pdfText.indexOf("SUMMER PAY SHARES  ID 0005");
@@ -172,8 +220,7 @@ public class Main {
 			amount = DecimalFormat.getNumberInstance().parse(m.group(4)).doubleValue();
 			
 			// Check if transaction is a bill
-			boolean isBill = Arrays.stream(billNames).anyMatch(description::contains);
-			category = isBill ? "bill" : "misc";
+			category = getCategory(description);
 			
 			Object[] newRow = new Object[3];
 			newRow[0] = category;
@@ -196,5 +243,17 @@ public class Main {
 		summaryStr += "</html>";
 		
 		lblSummary.setText(summaryStr);
+	}
+	
+	private String getCategory(String description) {
+		String category = null;
+		
+		for(String[] theCat : categoryData) {
+			if(Arrays.stream(theCat[1].split(",")).anyMatch(description::contains)) {
+				category = theCat[0].toString();
+			}
+		}
+		
+		return (category == null) ? "misc" : category;
 	}
 }
