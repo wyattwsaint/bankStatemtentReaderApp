@@ -189,17 +189,10 @@ public class Main {
 		String pdfText = stripper.getText(PDDocument.load(file)).toUpperCase().replaceAll("\n", "");
 
 		HashMap<String, Double> summary = new HashMap<>();
-<<<<<<< HEAD
-		summary.put("bill", 0.00);
-		summary.put("misc", 0.00);
-		
-		//BufferedWriter csvFile = new BufferedWriter(new FileWriter("csvFile.csv", true));
-		String[] billNames = { "ROYAL FARMS" };
-=======
+
 		for(String cat : categories) {
 			summary.put(cat, 0.00);
 		}
->>>>>>> b4353c5c084d18e5adb5c786b32c65b389488806
 		
 		int beginIdx = pdfText.indexOf("CHECKING  ID 0004");
 		int endIdx = pdfText.indexOf("SUMMER PAY SHARES  ID 0005");
