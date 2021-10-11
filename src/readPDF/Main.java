@@ -110,7 +110,7 @@ public class Main {
 		
 		
 		frame = new JFrame("Saint Statements");
-		frame.setBounds(100, 100, 707, 481);
+		frame.setBounds(100, 100, 707, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -135,7 +135,7 @@ public class Main {
 		desktopPane.add(lblTransactions);
 
 		JPanel transactionPanel = new JPanel();
-		transactionPanel.setBounds(6, 150, 695, 303);
+		transactionPanel.setBounds(6, 150, 695, 700);
 	
 		String[] columnNames = {"Category","Description","Amount"};
 		model = new DefaultTableModel(columnNames, 0);
