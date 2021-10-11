@@ -34,10 +34,22 @@ public class readPDF {
 		bw.flush();
 		bw.close();
 
-		BufferedReader buffRead = new BufferedReader(new FileReader("pdfText"));
+		BufferedReader buffRead = new BufferedReader(new FileReader("bankData"));
+		BufferedWriter buffWrite = new BufferedWriter(new FileWriter("pdfText"));
 		String tempLine = null;
 		while ((tempLine = buffRead.readLine()) != null) {
-
+			String input2 = tempLine;
+			String regex2 = "REGULAR 2 OF";
+			Matcher m2 = Pattern.compile(regex2).matcher(input2);
+			if (m2.find()) {
+				while ((tempLine = buffRead.readLine()) != null) {
+					buffWrite.write(tempLine);
+					
+				}
+				break;
+			} else if (!m2.find()) {
+				continue;
+			}
 		}
 
 		HashMap<String, String> hashMap = new HashMap<>();
