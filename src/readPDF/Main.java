@@ -1,6 +1,5 @@
 package readPDF;
 
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -14,6 +13,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.google.gson.Gson;
+
+import readPDF.celleditor.CategoryEditor;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -36,6 +37,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,6 +56,7 @@ public class Main {
 	DefaultTableModel model;
 	PropertiesConfiguration config;
 	String[][] categoryData;
+	ArrayList<String> categories;
 
 	/**
 	 * Launch the application.
@@ -85,6 +88,27 @@ public class Main {
 	 * @throws ConfigurationException 
 	 */
 	private void initialize() {
+		categories = new ArrayList<String>();
+		
+		try {
+			config = new PropertiesConfiguration("categories.properties");
+			String catProp = config.getProperty("categories").toString();
+			categories.addAll(Arrays.asList(catProp.split(",")));
+			
+			categoryData = new String[categories.size()][2];
+			int idx = 0;
+			for(String category : categories) {
+				categoryData[idx][0] = category;
+				categoryData[idx][1] = StringUtils.join(config.getStringArray(category), ",");
+				idx++;
+			}
+			categories.add("misc");
+		
+		} catch (ConfigurationException e1) {
+			e1.printStackTrace();
+		}
+		
+		
 		frame = new JFrame("Saint Statements");
 		frame.setBounds(100, 100, 707, 481);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,6 +144,8 @@ public class Main {
 		tblTransactions = new JTable(model);
 		tblTransactions.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tblTransactions.setAutoCreateRowSorter(true);
+		tblTransactions.getColumnModel().getColumn(0).setCellEditor(new CategoryEditor(categories));
+		
 		JScrollPane scrollPane = new JScrollPane( tblTransactions );
 		
 		transactionPanel.add(scrollPane);
@@ -151,26 +177,6 @@ public class Main {
 		desktopPane.add(btnNewButton_1);
 		*/
 		
-		
-		try {
-			config = new PropertiesConfiguration("categories.properties");
-			String catProp = config.getProperty("categories").toString();
-			String[] categories = catProp.split(",");
-			
-			categoryData = new String[categories.length][2];
-			int idx = 0;
-			for(String category : categories) {
-				categoryData[idx][0] = category;
-				categoryData[idx][1] = StringUtils.join(config.getStringArray(category), ",");
-				idx++;
-			}
-		
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
 		frame.setVisible(true);
 		
 		
@@ -183,8 +189,9 @@ public class Main {
 		String pdfText = stripper.getText(PDDocument.load(file)).toUpperCase().replaceAll("\n", "");
 
 		HashMap<String, Double> summary = new HashMap<>();
-		summary.put("bill", 0.00);
-		summary.put("misc", 0.00);
+		for(String cat : categories) {
+			summary.put(cat, 0.00);
+		}
 		
 		int beginIdx = pdfText.indexOf("CHECKING  ID 0004");
 		int endIdx = pdfText.indexOf("SUMMER PAY SHARES  ID 0005");
