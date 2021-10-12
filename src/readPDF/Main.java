@@ -38,7 +38,7 @@ import javax.swing.border.LineBorder;
 
 public class Main {
 
-	private JFrame frame;
+	JFrame frame;
 	private Category catFrame;
 	private JTable tblTransactions;
 	private JLabel lblSummary;
@@ -79,23 +79,7 @@ public class Main {
 	private void initialize() {
 		categories = new ArrayList<String>();
 		
-		try {
-			config = new PropertiesConfiguration("categories.properties");
-			String catProp = config.getProperty("categories").toString();
-			categories.addAll(Arrays.asList(catProp.split(",")));
-			
-			categoryData = new String[categories.size()][2];
-			int idx = 0;
-			for(String category : categories) {
-				categoryData[idx][0] = category;
-				categoryData[idx][1] = StringUtils.join(config.getStringArray(category), ",");
-				idx++;
-			}
-			categories.add("misc");
-		
-		} catch (ConfigurationException e1) {
-			e1.printStackTrace();
-		}
+		loadCategories();
 		
 		frame = new JFrame("Saint Statements");
 		frame.setBounds(100, 100, 707, 700);
@@ -107,7 +91,7 @@ public class Main {
 		frame.getContentPane().add(desktopPane, "name_34411139674794");
 
 		JLabel lbl = new JLabel("Summary of transactions");
-		lbl.setBounds(6, 47, 157, 16);
+		lbl.setBounds(6, 42, 157, 25);
 		desktopPane.add(lbl);
 		
 		JPanel panel = new JPanel();
@@ -160,7 +144,7 @@ public class Main {
 		desktopPane.add(btnNewButton);
 		
 		JButton catBtn = new JButton("View Categories");
-		catBtn.setBounds(138, 6, 120, 29);
+		catBtn.setBounds(138, 6, 140, 29);
 		catBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -172,7 +156,7 @@ public class Main {
 		
 		frame.setVisible(true);
 		
-		catFrame = new Category(categoryData, frame);
+		catFrame = new Category(categoryData, this);
 	}
 	
 	public void parseFile(File file) throws IOException, ParseException {
@@ -200,7 +184,7 @@ public class Main {
 		String regex = "(.+?(?=[0-9][,]?[0-9]{3}.[0-9]{2}))([0-9][,]?[0-9]{3}.[0-9]{2})([0-9]{2}\\/[0-9]{2}\\s)(-[0-9]?[,]?[0-9]{0,3}.[0-9]{2})";
 		Matcher m = Pattern.compile(regex).matcher(pdfText);
 		while(m.find()) {
-			System.out.println(m.group(0));
+			//System.out.println(m.group(0));
 			description = m.group(1);
 			amount = DecimalFormat.getNumberInstance().parse(m.group(4)).doubleValue();
 			
@@ -215,17 +199,13 @@ public class Main {
 			
 			currAmount = summary.get(category).doubleValue();
 			summary.put(category, currAmount + amount);
-			
-			//csvFile.write(category + "," + description + "," + Double.toString(amount));
-			//csvFile.newLine();
-			//csvFile.flush();
 		}
 		
-		String summaryStr = "<html>";
+		String summaryStr = "";
 		for(String key : summary.keySet()) {
-			summaryStr += key + ": " + summary.get(key).toString() + "<br />";
+			summaryStr += key + ": " + summary.get(key).toString() + "\t\t";
 		}
-		summaryStr += "</html>";
+		summaryStr += "";
 		
 		lblSummary.setText(summaryStr);
 	}
@@ -234,11 +214,32 @@ public class Main {
 		String category = null;
 		
 		for(String[] theCat : categoryData) {
-			if(Arrays.stream(theCat[1].split(",")).anyMatch(description::contains)) {
+			if(Arrays.stream(theCat[1].toUpperCase().split(",")).anyMatch(description::contains)) {
 				category = theCat[0].toString();
+				break;
 			}
 		}
 		
 		return (category == null) ? "misc" : category;
+	}
+	
+	public void loadCategories() {
+		try {
+			config = new PropertiesConfiguration("categories.properties");
+			String[] catProp = config.getStringArray("categories");
+			categories.addAll(Arrays.asList(catProp));
+			
+			categoryData = new String[categories.size()][2];
+			int idx = 0;
+			for(String category : categories) {
+				categoryData[idx][0] = category;
+				categoryData[idx][1] = StringUtils.join(config.getStringArray(category), ",");
+				idx++;
+			}
+			categories.add("misc");
+		
+		} catch (ConfigurationException e1) {
+			e1.printStackTrace();
+		}
 	}
 }
