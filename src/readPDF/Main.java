@@ -4,15 +4,11 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-
-import com.google.gson.Gson;
 
 import readPDF.celleditor.CategoryEditor;
 
@@ -28,21 +24,14 @@ import javax.swing.JFileChooser;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.border.LineBorder;
@@ -108,7 +97,6 @@ public class Main {
 			e1.printStackTrace();
 		}
 		
-		
 		frame = new JFrame("Saint Statements");
 		frame.setBounds(100, 100, 707, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -139,7 +127,6 @@ public class Main {
 	
 		String[] columnNames = {"Category","Description","Amount"};
 		model = new DefaultTableModel(columnNames, 0);
-		
 		
 		tblTransactions = new JTable(model);
 		tblTransactions.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -172,15 +159,20 @@ public class Main {
 		btnNewButton.setBounds(6, 6, 131, 29);
 		desktopPane.add(btnNewButton);
 		
-		/*JButton btnNewButton_1 = new JButton("Save");
-		btnNewButton_1.setBounds(138, 6, 82, 29);
-		desktopPane.add(btnNewButton_1);
-		*/
+		JButton catBtn = new JButton("View Categories");
+		catBtn.setBounds(138, 6, 120, 29);
+		catBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				catFrame.setVisible(true);
+				frame.setVisible(false);
+			}
+		});
+		desktopPane.add(catBtn);
 		
 		frame.setVisible(true);
 		
-		
-		
+		catFrame = new Category(categoryData, frame);
 	}
 	
 	public void parseFile(File file) throws IOException, ParseException {
