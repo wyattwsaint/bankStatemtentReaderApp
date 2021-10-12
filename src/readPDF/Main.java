@@ -159,6 +159,16 @@ public class Main {
 		});
 		desktopPane.add(catBtn);
 		
+		JButton reloadBtn = new JButton("Reload");
+		reloadBtn.setBounds(280, 6, 140, 29);
+		reloadBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser chooser = new JFileChooser();
+			}
+		});
+		desktopPane.add(reloadBtn);
+		
 		frame.setVisible(true);
 		
 		catFrame = new Category(categoryData, this);
