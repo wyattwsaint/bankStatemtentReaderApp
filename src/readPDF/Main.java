@@ -22,6 +22,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -82,7 +83,7 @@ public class Main {
 		loadCategories();
 		
 		frame = new JFrame("Saint Statements");
-		frame.setBounds(100, 100, 707, 700);
+		frame.setBounds(50, 50, 800, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -95,7 +96,7 @@ public class Main {
 		desktopPane.add(lbl);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(6, 64, 685, 44);
+		panel.setBounds(6, 64, 800, 44);
 		
 		lblSummary = new JLabel("");
 		panel.add(lblSummary);
@@ -107,7 +108,7 @@ public class Main {
 		desktopPane.add(lblTransactions);
 
 		JPanel transactionPanel = new JPanel();
-		transactionPanel.setBounds(6, 150, 695, 700);
+		transactionPanel.setBounds(6, 150, 800, 700);
 	
 		String[] columnNames = {"Category","Description","Amount"};
 		model = new DefaultTableModel(columnNames, 0);
@@ -116,8 +117,12 @@ public class Main {
 		tblTransactions.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tblTransactions.setAutoCreateRowSorter(true);
 		tblTransactions.getColumnModel().getColumn(0).setCellEditor(new CategoryEditor(categories));
+		tblTransactions.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tblTransactions.getColumnModel().getColumn(1).setPreferredWidth(500);
+		tblTransactions.getColumnModel().getColumn(2).setPreferredWidth(100);
 		
 		JScrollPane scrollPane = new JScrollPane( tblTransactions );
+		scrollPane.setPreferredSize(new Dimension(700, 500));
 		
 		transactionPanel.add(scrollPane);
 		desktopPane.add(transactionPanel);
