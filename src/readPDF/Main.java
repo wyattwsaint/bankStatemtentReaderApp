@@ -164,7 +164,12 @@ public class Main {
 		reloadBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				reloadData();
+				try {
+					reloadData();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		desktopPane.add(reloadBtn);
@@ -247,7 +252,7 @@ public class Main {
 		}
 	}
 	
-	public void reloadData() {
+	public void reloadData() throws ParseException {
 		int rowCount = tblTransactions.getRowCount();
 		HashMap<String, Double> summary = new HashMap<>();
 		double amount = 0.00;
@@ -257,6 +262,8 @@ public class Main {
 		for(int i=0; i < rowCount; i++) {
 			category = getCategory(String.valueOf(model.getValueAt(i, 1)));
 			model.setValueAt(category, i, 0);
+			
+			amount = DecimalFormat.getNumberInstance().parse(model.getValueAt(i, 2).toString()).doubleValue();
 			
 			currAmount = (summary.containsKey(category)) ? summary.get(category).doubleValue() : 0.00;
 			summary.put(category, currAmount + amount);
