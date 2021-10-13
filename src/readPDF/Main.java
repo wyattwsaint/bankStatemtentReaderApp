@@ -10,12 +10,24 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import readPDF.celleditor.CategoryEditor;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import java.awt.CardLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JDesktopPane;
@@ -26,8 +38,12 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -36,6 +52,8 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 public class Main {
@@ -48,6 +66,7 @@ public class Main {
 	PropertiesConfiguration config;
 	String[][] categoryData;
 	ArrayList<String> categories;
+	HashMap<String, Double> summary = new HashMap<>();
 
 	/**
 	 * Launch the application.
@@ -96,7 +115,7 @@ public class Main {
 		desktopPane.add(lbl);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(6, 64, 800, 44);
+		panel.setBounds(6, 64, 800, 45);
 		
 		lblSummary = new JLabel("");
 		panel.add(lblSummary);
@@ -167,12 +186,30 @@ public class Main {
 				try {
 					reloadData();
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		});
 		desktopPane.add(reloadBtn);
+		
+		JButton saveBtn = new JButton("Save Data");
+		saveBtn.setBounds(430, 6, 140, 29);
+		saveBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					save();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				} catch (DocumentException e1) {
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		desktopPane.add(saveBtn);
 		
 		frame.setVisible(true);
 		
@@ -186,7 +223,7 @@ public class Main {
 		String pdfText = stripper.getText(pDoc).toUpperCase().replaceAll("\n", "");
 		pDoc.close();
 
-		HashMap<String, Double> summary = new HashMap<>();
+		summary = new HashMap<>();
 		
 		int beginIdx = pdfText.indexOf("CHECKING  ID 0004");
 		int endIdx = pdfText.indexOf("SUMMER PAY SHARES  ID 0005");
@@ -195,8 +232,9 @@ public class Main {
 		pdfText = pdfText.substring(beginIdx + 17, endIdx - 1);
 		
 		String description = null;
-		double amount = 0.00;
-		double currAmount = 0.00;
+		BigDecimal amount;
+		BigDecimal currAmount;
+		BigDecimal defaultVal = new BigDecimal("0.00");
 		String category = null;
 		
 		String regex = "(.+?(?=[0-9][,]?[0-9]{3}.[0-9]{2}))([0-9][,]?[0-9]{3}.[0-9]{2})([0-9]{2}\\/[0-9]{2}\\s)(-[0-9]?[,]?[0-9]{0,3}.[0-9]{2})";
@@ -204,7 +242,9 @@ public class Main {
 		while(m.find()) {
 			//System.out.println(m.group(0));
 			description = m.group(1);
-			amount = DecimalFormat.getNumberInstance().parse(m.group(4)).doubleValue();
+			
+			amount = new BigDecimal(m.group(4).replace(",",""));
+			amount.setScale(2, RoundingMode.UP);
 			
 			// Check if transaction is a bill
 			category = getCategory(description);
@@ -212,10 +252,11 @@ public class Main {
 			Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
 			model.addRow(newRow);
 			
-			currAmount = (summary.containsKey(category)) ? summary.get(category).doubleValue() : 0.00;
-			summary.put(category, currAmount + amount);
+			currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
+			currAmount.setScale(2, RoundingMode.UP);
+			summary.put(category, (currAmount.add(amount)).doubleValue());
 		}
-		showSummary(summary);
+		showSummary();
 	}
 	
 	private String getCategory(String description) {
@@ -254,30 +295,95 @@ public class Main {
 	
 	public void reloadData() throws ParseException {
 		int rowCount = tblTransactions.getRowCount();
-		HashMap<String, Double> summary = new HashMap<>();
-		double amount = 0.00;
-		double currAmount = 0.00;
+		summary = new HashMap<>();
+		BigDecimal amount;
+		BigDecimal currAmount;
+		BigDecimal defaultVal = new BigDecimal("0.00");
 		String category;
 		
 		for(int i=0; i < rowCount; i++) {
 			category = getCategory(String.valueOf(model.getValueAt(i, 1)));
 			model.setValueAt(category, i, 0);
 			
-			amount = DecimalFormat.getNumberInstance().parse(model.getValueAt(i, 2).toString()).doubleValue();
+			amount = new BigDecimal(model.getValueAt(i, 2).toString());
 			
-			currAmount = (summary.containsKey(category)) ? summary.get(category).doubleValue() : 0.00;
-			summary.put(category, currAmount + amount);
+			currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
+			summary.put(category, (currAmount.add(amount)).doubleValue());
 		}
-		showSummary(summary);
+		showSummary();
 	}
 	
-	public void showSummary(HashMap<String, Double> summary) {
-		String summaryStr = "";
+	public void showSummary() {
+		String summaryStr = "<html>";
+		int idx = 1;
+		
 		for(String key : summary.keySet()) {
-			summaryStr += key + ": " + summary.get(key).toString() + "\t\t";
+			BigDecimal value = new BigDecimal(summary.get(key).toString());
+			value.setScale(2, RoundingMode.CEILING);
+			
+			summaryStr += "<span style='float:left; padding-right:20px;'>" + key + ": " + String.format("%.2f", value) + "</span>"
+				+ (idx % 4 == 0? "<br />" : "\t\t\t\t");
+			idx++;
 		}
-		summaryStr += "";
+		summaryStr += "</html>";
 		
 		lblSummary.setText(summaryStr);
+	}
+	
+	public void save() throws ParseException, DocumentException, FileNotFoundException {
+		File fileToSave;
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Specify a file to save");   
+		String category;
+		String amount;
+		String desc;
+		Font regularFont = new Font(FontFamily.HELVETICA, 10, Font.NORMAL);
+		Font boldFont = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
+		 
+		int userSelection = fileChooser.showSaveDialog(frame);
+		 
+		if (userSelection == JFileChooser.APPROVE_OPTION) {
+		    fileToSave = fileChooser.getSelectedFile();
+		    
+		    // create pdf here
+		    Document doc = new Document();
+		    PdfWriter.getInstance(doc, new FileOutputStream(fileToSave));
+		    doc.open();
+		    
+		    PdfPTable summaryTable = new PdfPTable(3);
+		    summaryTable.setTotalWidth(520);
+		    summaryTable.setLockedWidth(true);
+		    
+		    for(String key : summary.keySet()) {
+		    	summaryTable.addCell(new PdfPCell(new Paragraph(key + ": " + summary.get(key).toString())));
+			}
+
+		    doc.add(new Paragraph("Summary", boldFont));
+		    doc.add(summaryTable);
+		    
+		    PdfPTable transactionTable = new PdfPTable(3);
+		    transactionTable.setTotalWidth(new float[] {60, 400, 60});
+		    transactionTable.setLockedWidth(true);
+		    
+		    doc.add(new Paragraph(""));
+		    doc.add(new Paragraph("Transacations", boldFont));
+		    transactionTable.addCell(new PdfPCell(new Paragraph("Category")));
+		    transactionTable.addCell(new PdfPCell(new Paragraph("Description")));
+		    transactionTable.addCell(new PdfPCell(new Paragraph("Amount")));
+		    
+		    for(int i=0; i < tblTransactions.getRowCount(); i++) {
+				category = String.valueOf(model.getValueAt(i, 0));
+				desc = String.valueOf(model.getValueAt(i, 1));
+				amount = model.getValueAt(i, 2).toString();
+				
+				transactionTable.addCell(new PdfPCell(new Paragraph(category)));
+				transactionTable.addCell(new PdfPCell(new Paragraph(desc)));
+				transactionTable.addCell(new PdfPCell(new Paragraph(amount)));
+			}
+		    doc.add(transactionTable);
+		    doc.close();
+		    
+		    JOptionPane.showMessageDialog(null, "File Saved");
+		}
 	}
 }
