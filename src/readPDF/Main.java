@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.border.LineBorder;
@@ -77,7 +78,6 @@ public class Main {
 	 * @throws ConfigurationException 
 	 */
 	private void initialize() {
-		categories = new ArrayList<String>();
 		
 		loadCategories();
 		
@@ -154,21 +154,29 @@ public class Main {
 		});
 		desktopPane.add(catBtn);
 		
+		JButton reloadBtn = new JButton("Reload Data");
+		reloadBtn.setBounds(280, 6, 140, 29);
+		reloadBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				reloadData();
+			}
+		});
+		desktopPane.add(reloadBtn);
+		
 		frame.setVisible(true);
 		
 		catFrame = new Category(categoryData, this);
 	}
 	
 	public void parseFile(File file) throws IOException, ParseException {
-        
+		model.setNumRows(0);
 		PDFTextStripper stripper = new PDFTextStripper();
-		String pdfText = stripper.getText(PDDocument.load(file)).toUpperCase().replaceAll("\n", "");
+		PDDocument pDoc = PDDocument.load(file);
+		String pdfText = stripper.getText(pDoc).toUpperCase().replaceAll("\n", "");
+		pDoc.close();
 
 		HashMap<String, Double> summary = new HashMap<>();
-
-		for(String cat : categories) {
-			summary.put(cat, 0.00);
-		}
 		
 		int beginIdx = pdfText.indexOf("CHECKING  ID 0004");
 		int endIdx = pdfText.indexOf("SUMMER PAY SHARES  ID 0005");
@@ -191,23 +199,13 @@ public class Main {
 			// Check if transaction is a bill
 			category = getCategory(description);
 			
-			Object[] newRow = new Object[3];
-			newRow[0] = category;
-			newRow[1] = description;
-			newRow[2] = String.valueOf(amount);
+			Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
 			model.addRow(newRow);
 			
-			currAmount = summary.get(category).doubleValue();
+			currAmount = (summary.containsKey(category)) ? summary.get(category).doubleValue() : 0.00;
 			summary.put(category, currAmount + amount);
 		}
-		
-		String summaryStr = "";
-		for(String key : summary.keySet()) {
-			summaryStr += key + ": " + summary.get(key).toString() + "\t\t";
-		}
-		summaryStr += "";
-		
-		lblSummary.setText(summaryStr);
+		showSummary(summary);
 	}
 	
 	private String getCategory(String description) {
@@ -225,6 +223,7 @@ public class Main {
 	
 	public void loadCategories() {
 		try {
+			categories = new ArrayList<String>();
 			config = new PropertiesConfiguration("categories.properties");
 			String[] catProp = config.getStringArray("categories");
 			categories.addAll(Arrays.asList(catProp));
@@ -241,5 +240,32 @@ public class Main {
 		} catch (ConfigurationException e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	public void reloadData() {
+		int rowCount = tblTransactions.getRowCount();
+		HashMap<String, Double> summary = new HashMap<>();
+		double amount = 0.00;
+		double currAmount = 0.00;
+		String category;
+		
+		for(int i=0; i < rowCount; i++) {
+			category = getCategory(String.valueOf(model.getValueAt(i, 1)));
+			model.setValueAt(category, i, 0);
+			
+			currAmount = (summary.containsKey(category)) ? summary.get(category).doubleValue() : 0.00;
+			summary.put(category, currAmount + amount);
+		}
+		showSummary(summary);
+	}
+	
+	public void showSummary(HashMap<String, Double> summary) {
+		String summaryStr = "";
+		for(String key : summary.keySet()) {
+			summaryStr += key + ": " + summary.get(key).toString() + "\t\t";
+		}
+		summaryStr += "";
+		
+		lblSummary.setText(summaryStr);
 	}
 }
