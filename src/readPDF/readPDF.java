@@ -1,5 +1,6 @@
 package readPDF;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,6 +18,9 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -24,7 +28,19 @@ public class readPDF {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
-
+		JFrame mainFrame = new JFrame("Saint Statement");
+		mainFrame.setBounds(6, 6, 500, 500);
+		mainFrame.setVisible(true);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JPanel catPanel = new JPanel();
+		catPanel.setBounds(2, 2, 5, 5);
+		catPanel.setOpaque(true);
+		catPanel.setBackground(Color.BLACK);
+		mainFrame.add(catPanel);
+		
+		
+		
 		File file = new File("C:\\Users\\wmsai\\Desktop\\BankStatement.pdf");
 		PDFTextStripper stripper = new PDFTextStripper();
 		BufferedWriter bw = new BufferedWriter(new FileWriter("bankData", StandardCharsets.UTF_8));
@@ -44,7 +60,8 @@ public class readPDF {
 			if (m2.find()) {
 				while ((tempLine = buffRead.readLine()) != null) {
 					buffWrite.write(tempLine);
-					
+					buffWrite.newLine();
+					buffWrite.flush();
 				}
 				break;
 			} else if (!m2.find()) {
@@ -69,7 +86,7 @@ public class readPDF {
 		BufferedWriter hash = new BufferedWriter(new FileWriter("hashMap"));
 		BufferedWriter clearData = new BufferedWriter(new FileWriter("csvFile"));
 		LineNumberReader lineNum = new LineNumberReader(new FileReader("bankData"));
-		String[] billNames = { "DFAS", "AMAZON", "PRIME VIDEO" };
+		String[] billNames = { "ROYAL FARMS" };
 		String line;
 		while ((line = lineNum.readLine()) != null) {
 			BufferedWriter csvFile = new BufferedWriter(new FileWriter("csvFile", true));
