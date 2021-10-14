@@ -3,6 +3,8 @@ package readPDF;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -10,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -25,6 +29,9 @@ import readPDF.celleditor.CategoryEditor;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+
 import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,6 +56,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -134,13 +142,19 @@ public class Main {
 		
 		tblTransactions = new JTable(model);
 		tblTransactions.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tblTransactions.setAutoCreateRowSorter(true);
 		tblTransactions.getColumnModel().getColumn(0).setCellEditor(new CategoryEditor(categories));
 		tblTransactions.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tblTransactions.getColumnModel().getColumn(1).setPreferredWidth(500);
 		tblTransactions.getColumnModel().getColumn(2).setPreferredWidth(100);
 		
-		JScrollPane scrollPane = new JScrollPane( tblTransactions );
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tblTransactions.getModel());
+		tblTransactions.setRowSorter(sorter);
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		sorter.setSortKeys(sortKeys);
+		sorter.sort();
+		
+		JScrollPane scrollPane = new JScrollPane(tblTransactions);
 		scrollPane.setPreferredSize(new Dimension(700, 500));
 		
 		transactionPanel.add(scrollPane);
@@ -350,31 +364,43 @@ public class Main {
 		    PdfWriter.getInstance(doc, new FileOutputStream(fileToSave));
 		    doc.open();
 		    
-		    PdfPTable summaryTable = new PdfPTable(3);
-		    summaryTable.setTotalWidth(520);
-		    summaryTable.setLockedWidth(true);
-		    
-		    for(String key : summary.keySet()) {
-		    	summaryTable.addCell(new PdfPCell(new Paragraph(key + ": " + summary.get(key).toString())));
-			}
-
 		    doc.add(new Paragraph("Summary", boldFont));
-		    doc.add(summaryTable);
+		    
+		    String content = "";
+		    for(String key : summary.keySet()) {
+		    	/*doc.add(new Chunk(key + ": " + summary.get(key).toString()));
+		    	doc.add(new Chunk("   "));*/
+		    	BigDecimal value = new BigDecimal(summary.get(key).toString());
+				value.setScale(2, RoundingMode.CEILING);
+		    	content += key + ": " + String.format("%.2f", value) + "    ";
+			}
+		    doc.add(new Paragraph(content));
+		    
+		    doc.add(new Paragraph(Chunk.NEWLINE));
+		    doc.add(new Paragraph("Transacations", boldFont));
+		    doc.add(new Paragraph(Chunk.NEWLINE));
 		    
 		    PdfPTable transactionTable = new PdfPTable(3);
-		    transactionTable.setTotalWidth(new float[] {60, 400, 60});
+		    transactionTable.setTotalWidth(new float[] {80, 360, 80});
 		    transactionTable.setLockedWidth(true);
 		    
-		    doc.add(new Paragraph(""));
-		    doc.add(new Paragraph("Transacations", boldFont));
-		    transactionTable.addCell(new PdfPCell(new Paragraph("Category")));
-		    transactionTable.addCell(new PdfPCell(new Paragraph("Description")));
-		    transactionTable.addCell(new PdfPCell(new Paragraph("Amount")));
+		    PdfPCell catCell = new PdfPCell(new Paragraph("Category"));
+		    catCell.setPadding(8);
+		    
+		    PdfPCell descCell = new PdfPCell(new Paragraph("Description"));
+		    descCell.setPadding(8);
+		    
+		    PdfPCell amtCell = new PdfPCell(new Paragraph("Amount"));
+		    amtCell.setPadding(8);
+		    
+		    transactionTable.addCell(catCell);
+		    transactionTable.addCell(descCell);
+		    transactionTable.addCell(amtCell);
 		    
 		    for(int i=0; i < tblTransactions.getRowCount(); i++) {
-				category = String.valueOf(model.getValueAt(i, 0));
-				desc = String.valueOf(model.getValueAt(i, 1));
-				amount = model.getValueAt(i, 2).toString();
+				category = String.valueOf(tblTransactions.getValueAt(i, 0));
+				desc = String.valueOf(tblTransactions.getValueAt(i, 1));
+				amount = tblTransactions.getValueAt(i, 2).toString();
 				
 				transactionTable.addCell(new PdfPCell(new Paragraph(category)));
 				transactionTable.addCell(new PdfPCell(new Paragraph(desc)));
