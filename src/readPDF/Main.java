@@ -102,7 +102,7 @@ public class Main {
 		loadCategories();
 		
 		frame = new JFrame("Saint Statements");
-		frame.setBounds(50, 50, 800, 700);
+		frame.setBounds(50, 50, 1400, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -111,11 +111,11 @@ public class Main {
 		frame.getContentPane().add(desktopPane, "name_34411139674794");
 
 		JLabel lbl = new JLabel("Summary of transactions");
-		lbl.setBounds(6, 42, 157, 25);
+		lbl.setBounds(770, 42, 157, 25);
 		desktopPane.add(lbl);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(6, 64, 800, 45);
+		panel.setBounds(770, 64, 600, 550);
 		
 		lblSummary = new JLabel("");
 		panel.add(lblSummary);
@@ -123,11 +123,11 @@ public class Main {
 		desktopPane.add(panel);
 
 		JLabel lblTransactions = new JLabel("Transactions");
-		lblTransactions.setBounds(6, 131, 98, 16);
+		lblTransactions.setBounds(6, 42, 98, 16);
 		desktopPane.add(lblTransactions);
 
 		JPanel transactionPanel = new JPanel();
-		transactionPanel.setBounds(6, 150, 800, 700);
+		transactionPanel.setBounds(6, 64, 750, 550);
 	
 		String[] columnNames = {"Category","Description","Amount"};
 		model = new DefaultTableModel(columnNames, 0);
