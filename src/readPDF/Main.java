@@ -8,6 +8,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -358,6 +359,13 @@ public class Main {
 		 
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
 		    fileToSave = fileChooser.getSelectedFile();
+		    
+		    if (FilenameUtils.getExtension(fileToSave.getName()).equalsIgnoreCase("pdf")) {
+		        // filename is OK as-is
+		    } else {
+		    	fileToSave = new File(fileToSave.toString() + ".pdf");  // append .xml if "foo.jpg.xml" is OK
+		        //file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".xml"); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+		    }
 		    
 		    // create pdf here
 		    Document doc = new Document();
