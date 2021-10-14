@@ -230,7 +230,7 @@ public class Main {
 		System.out.println("Begin: " + beginIdx + "   End: " + endIdx);
 		
 		pdfText = pdfText.substring(beginIdx + 17, endIdx - 1);
-		
+		System.out.println(pdfText);
 		String description = null;
 		BigDecimal amount;
 		BigDecimal currAmount;
