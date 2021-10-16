@@ -197,15 +197,15 @@ public class Main {
 		summaryLabel = new JLabel("Summary of transactions");
 		summaryLabel.setVisible(false);
 		
-		summaryPanel = new JPanel(new GridLayout(0, 3, 5, 5));
-		/*summaryPanel = new JPanel();
-		summaryPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		//summaryPanel = new JPanel(new GridLayout(0, 3, 5, 5));
+		summaryPanel = new JPanel();
+		//summaryPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		summaryLayout = new GroupLayout(summaryPanel);
 		summarySeqGroup = summaryLayout.createSequentialGroup();
 		summaryLayout.setHorizontalGroup(
 			summaryLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
 				.addGroup(summarySeqGroup)
-		);*/
+		);
 		summaryPanel.setVisible(false);
 
 		JLabel transactionsLabel = new JLabel("Transactions");
@@ -280,7 +280,7 @@ public class Main {
 				.addComponent(btnPanel, 35, 35, 35)
 				.addComponent(summaryLabel)
 				.addGap(5)
-				.addComponent(summaryPanel)
+				.addComponent(summaryPanel, 100, 100, 100)
 				.addComponent(transactionsLabel)
 				.addGap(5)
 				.addComponent(scrollPane)
@@ -415,8 +415,8 @@ public class Main {
 			tempLabel.setForeground(Color.WHITE);
 			tempLabel.setBackground(Color.DARK_GRAY);
 			
-			summaryPanel.add(tempLabel);
-			//summaryLayout.createSequentialGroup().addComponent(tempLabel);
+			//summaryPanel.add(tempLabel);
+			summaryLayout.createSequentialGroup().addComponent(tempLabel);
 		}
 
 		summaryLabel.setVisible(true);
