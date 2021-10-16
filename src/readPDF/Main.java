@@ -28,7 +28,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import readPDF.cell.CategoryEditor;
 import readPDF.cell.DescriptionRenderer;
 
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -45,6 +47,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -68,13 +71,17 @@ public class Main {
 	private Category catFrame;
 	private JTable tblTransactions;
 	TableRowSorter<TableModel> sorter;
-	private JLabel lblSummary;
 	DefaultTableModel model;
 	PropertiesConfiguration config;
 	String[][] categoryData;
 	ArrayList<String> categories;
 	HashMap<String, Double> summary = new HashMap<>();
+	JPanel summaryPanel;
 	JLabel summaryLabel;
+	int count = 0;
+	ArrayList<JLabel> labels = new ArrayList<JLabel>();
+	GroupLayout summaryLayout;
+	GroupLayout.SequentialGroup summarySeqGroup;
 
 	/**
 	 * Launch the application.
@@ -134,10 +141,8 @@ public class Main {
 		        }
 			}
 		});
-		newBtn.setBounds(6, 6, 131, 29);
 		
 		JButton catBtn = new JButton("View Categories");
-		catBtn.setBounds(138, 6, 140, 29);
 		catBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -147,7 +152,6 @@ public class Main {
 		});
 		
 		JButton reloadBtn = new JButton("Reload Data");
-		reloadBtn.setBounds(280, 6, 140, 29);
 		reloadBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -160,7 +164,6 @@ public class Main {
 		});
 		
 		JButton saveBtn = new JButton("Save Data");
-		saveBtn.setBounds(430, 6, 140, 29);
 		saveBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -179,6 +182,7 @@ public class Main {
 		
 
 		JPanel btnPanel = new JPanel();
+		//btnPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		GroupLayout btnLayout = new GroupLayout(btnPanel);
 		btnLayout.setHorizontalGroup(
 			btnLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
@@ -193,8 +197,16 @@ public class Main {
 		summaryLabel = new JLabel("Summary of transactions");
 		summaryLabel.setVisible(false);
 		
-		lblSummary = new JLabel("");
-		lblSummary.setVisible(false);
+		summaryPanel = new JPanel(new GridLayout(0, 3, 5, 5));
+		/*summaryPanel = new JPanel();
+		summaryPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		summaryLayout = new GroupLayout(summaryPanel);
+		summarySeqGroup = summaryLayout.createSequentialGroup();
+		summaryLayout.setHorizontalGroup(
+			summaryLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
+				.addGroup(summarySeqGroup)
+		);*/
+		summaryPanel.setVisible(false);
 
 		JLabel transactionsLabel = new JLabel("Transactions");
 		String[] columnNames = {"Category","Description","Amount"};
@@ -222,7 +234,6 @@ public class Main {
 		tblTransactions.getColumnModel().getColumn(2).setMaxWidth(100);
 		tblTransactions.getColumnModel().getColumn(2).setCellRenderer(renderer);
 		tblTransactions.getColumnModel().getColumn(2).setCellEditor(null);
-	
 		
 		sorter = new TableRowSorter<>(tblTransactions.getModel());
 		tblTransactions.setRowSorter(sorter);
@@ -249,7 +260,7 @@ public class Main {
 						.addGap(6, 6, 6)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
 					)	
-					.addComponent(lblSummary, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(summaryPanel, 634, 634, Short.MAX_VALUE)
 					.addGroup(frameLayout.createSequentialGroup()
 						.addGroup(frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 							.addComponent(transactionsLabel)
@@ -266,11 +277,10 @@ public class Main {
 		frameLayout.setVerticalGroup(
 			frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
 			.addGroup(frameLayout.createSequentialGroup()
-				.addComponent(btnPanel)
+				.addComponent(btnPanel, 35, 35, 35)
 				.addComponent(summaryLabel)
 				.addGap(5)
-				.addComponent(lblSummary)
-				.addGap(20)
+				.addComponent(summaryPanel)
 				.addComponent(transactionsLabel)
 				.addGap(5)
 				.addComponent(scrollPane)
@@ -385,23 +395,36 @@ public class Main {
 	}
 	
 	public void showSummary() {
-		String summaryStr = "<html>";
-		int idx = 1;
 		
+		int count = labels.size();
+		for(int i = 0; i < count; i++) {
+			summaryPanel.remove(labels.get(i));
+			labels.remove(i);
+		}
+		
+		JLabel tempLabel;
 		for(String key : summary.keySet()) {
 			BigDecimal value = new BigDecimal(summary.get(key).toString());
 			value.setScale(2, RoundingMode.CEILING);
 			
-			summaryStr += "<span style='border:5px white; float:left; padding:20px; background-color:#ccc; overflow:hidden;margin-bottom:10px;'>" + key + ": " + String.format("%.2f", value) + "</span>"
-				+ "<span style='width:10px; float:left; overflow:hidden;'>    </span>";
-				//+ (idx % 4 == 0? "<br />" : "<span style='width:10px; float:left; overflow:hidden;'>    </span>");
-			idx++;
+			tempLabel = new JLabel(key + ": " + String.format("%.2f", value));
+			tempLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			tempLabel.setVerticalAlignment(SwingConstants.CENTER);
+			tempLabel.setOpaque(true);
+			tempLabel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+			tempLabel.setForeground(Color.WHITE);
+			tempLabel.setBackground(Color.DARK_GRAY);
+			
+			summaryPanel.add(tempLabel);
+			//summaryLayout.createSequentialGroup().addComponent(tempLabel);
 		}
-		summaryStr += "</html>";
-		lblSummary.setText(summaryStr);
-		
+
 		summaryLabel.setVisible(true);
-		lblSummary.setVisible(true);
+		summaryPanel.setVisible(true);
+		
+		summaryPanel.revalidate();
+		summaryPanel.repaint();
+		
 	}
 	
 	public void save() throws ParseException, DocumentException, FileNotFoundException {
