@@ -2,6 +2,7 @@ package readPDF;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -117,7 +118,6 @@ public class Main {
 		frame = new JFrame("Saint Statements");
 		frame.setBounds(50, 50, 800, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setDefaultLookAndFeelDecorated(true);
 		GroupLayout frameLayout = new GroupLayout(frame.getContentPane());
 		frame.getContentPane().setLayout(frameLayout);
 		
@@ -259,11 +259,11 @@ public class Main {
 			.addGroup(frameLayout.createSequentialGroup()
 				.addComponent(btnPanel)
 				.addComponent(summaryLabel)
+				.addGap(5)
 				.addComponent(lblSummary)
-				.addContainerGap()
-				.addContainerGap()
-				.addContainerGap(20, 20)
+				.addGap(20)
 				.addComponent(transactionsLabel)
+				.addGap(5)
 				.addComponent(scrollPane)
 			)
 		);
