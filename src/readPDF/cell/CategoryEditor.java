@@ -1,4 +1,4 @@
-package readPDF.celleditor;
+package readPDF.cell;
 
 import java.awt.Component;
 import java.util.List;

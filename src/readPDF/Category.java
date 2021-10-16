@@ -29,7 +29,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.pdfbox.util.Vector;
 
-import readPDF.celleditor.CategoryEditor;
+import readPDF.cell.CategoryEditor;
 
 public class Category {
 	private Main parent;

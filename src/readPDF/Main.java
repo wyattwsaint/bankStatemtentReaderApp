@@ -2,7 +2,7 @@ package readPDF;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -19,28 +19,26 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import readPDF.celleditor.CategoryEditor;
+import readPDF.cell.CategoryEditor;
+import readPDF.cell.DescriptionRenderer;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.SwingConstants;
 
-import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 
 import java.awt.Color;
@@ -54,17 +52,14 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 public class Main {
@@ -203,17 +198,31 @@ public class Main {
 
 		JLabel transactionsLabel = new JLabel("Transactions");
 		String[] columnNames = {"Category","Description","Amount"};
-		model = new DefaultTableModel(columnNames, 0);
+		model = new DefaultTableModel(columnNames, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+			    return (column == 0);
+			}
+		};
+		
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setVerticalAlignment(SwingConstants.TOP);
 		
 		tblTransactions = new JTable(model);
 		tblTransactions.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		tblTransactions.setBorder(new LineBorder(new Color(0, 0, 0)));
+		tblTransactions.setGridColor(Color.BLACK);
+		tblTransactions.setIntercellSpacing(new Dimension(8,5));
 		tblTransactions.getColumnModel().getColumn(0).setCellEditor(new CategoryEditor(categories));
 		tblTransactions.getColumnModel().getColumn(0).setPreferredWidth(140);
 		tblTransactions.getColumnModel().getColumn(0).setMaxWidth(180);
+		tblTransactions.getColumnModel().getColumn(0).setCellRenderer(renderer);
 		tblTransactions.getColumnModel().getColumn(1).setPreferredWidth(400);
+		tblTransactions.getColumnModel().getColumn(1).setCellRenderer(new DescriptionRenderer());
 		tblTransactions.getColumnModel().getColumn(2).setPreferredWidth(100);
 		tblTransactions.getColumnModel().getColumn(2).setMaxWidth(100);
+		tblTransactions.getColumnModel().getColumn(2).setCellRenderer(renderer);
+		tblTransactions.getColumnModel().getColumn(2).setCellEditor(null);
+	
 		
 		sorter = new TableRowSorter<>(tblTransactions.getModel());
 		tblTransactions.setRowSorter(sorter);
@@ -295,24 +304,27 @@ public class Main {
 		BigDecimal defaultVal = new BigDecimal("0.00");
 		String category = null;
 		
-		String regex = "(.+?(?=[0-9][,]?[0-9]{3}.[0-9]{2}))([0-9][,]?[0-9]{3}.[0-9]{2})([0-9]{2}\\/[0-9]{2}\\s)(-[0-9]?[,]?[0-9]{0,3}.[0-9]{2})";
+		String regex = "(.+?(?=[0-9][,]?[0-9]{3}.[0-9]{2}))([0-9][,]?[0-9]{3}.[0-9]{2})([0-9]{2}\\/[0-9]{2}\\s)([-]?[0-9]?[,]?[0-9]{0,3}.[0-9]{2})";
 		Matcher m = Pattern.compile(regex).matcher(pdfText);
 		while(m.find()) {
 			//System.out.println(m.group(0));
-			description = m.group(1);
-			
 			amount = new BigDecimal(m.group(4).replace(",",""));
 			amount.setScale(2, RoundingMode.UP);
 			
-			// Check if transaction is a bill
-			category = getCategory(description);
-			
-			Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
-			model.addRow(newRow);
-			
-			currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
-			currAmount.setScale(2, RoundingMode.UP);
-			summary.put(category, (currAmount.add(amount)).doubleValue());
+			if (amount.doubleValue() > 0) {
+				description = m.group(1);
+				int idx = description.indexOf("TRANSACTIONAMOUNTNEWBALANCE");
+				description = (idx > 0 ) ? description.substring(idx + 27) : description;
+				
+				category = getCategory(description);
+				
+				Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
+				model.addRow(newRow);
+				
+				currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
+				currAmount.setScale(2, RoundingMode.UP);
+				summary.put(category, (currAmount.add(amount)).doubleValue());
+			}
 		}
 		showSummary();
 	}
@@ -380,7 +392,7 @@ public class Main {
 			BigDecimal value = new BigDecimal(summary.get(key).toString());
 			value.setScale(2, RoundingMode.CEILING);
 			
-			summaryStr += "<span style='float:left; padding:20px; background-color:#ccc; overflow:hidden;margin-bottom:10px;'>" + key + ": " + String.format("%.2f", value) + "</span>"
+			summaryStr += "<span style='border:5px white; float:left; padding:20px; background-color:#ccc; overflow:hidden;margin-bottom:10px;'>" + key + ": " + String.format("%.2f", value) + "</span>"
 				+ "<span style='width:10px; float:left; overflow:hidden;'>    </span>";
 				//+ (idx % 4 == 0? "<br />" : "<span style='width:10px; float:left; overflow:hidden;'>    </span>");
 			idx++;
