@@ -382,7 +382,7 @@ public class Main {
 		String category;
 		
 		for(int i=0; i < rowCount; i++) {
-			category = getCategory(String.valueOf(model.getValueAt(i, 1)));
+			category = getCategory(String.valueOf(tblTransactions.getValueAt(i, 1)));
 			tblTransactions.setValueAt(category, i, 0);
 			
 			amount = new BigDecimal(tblTransactions.getValueAt(i, 2).toString());
@@ -397,10 +397,14 @@ public class Main {
 	public void showSummary() {
 		
 		int count = labels.size();
+		System.out.println("Removing " + count + " labels");
 		for(int i = 0; i < count; i++) {
-			summaryPanel.remove(labels.get(i));
-			labels.remove(i);
+			summaryPanel.remove(labels.get(0));
+			labels.remove(0);
 		}
+		
+		//summaryPanel.revalidate();
+		//summaryPanel.repaint();
 		
 		JLabel tempLabel;
 		for(String key : summary.keySet()) {
@@ -417,7 +421,11 @@ public class Main {
 			
 			//summaryPanel.add(tempLabel);
 			summaryLayout.createSequentialGroup().addComponent(tempLabel);
+			labels.add(tempLabel);
 		}
+		
+
+		System.out.println("Adding " + labels.size() + " labels");
 
 		summaryLabel.setVisible(true);
 		summaryPanel.setVisible(true);
