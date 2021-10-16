@@ -311,7 +311,7 @@ public class Main {
 			amount = new BigDecimal(m.group(4).replace(",",""));
 			amount.setScale(2, RoundingMode.UP);
 			
-			if (amount.doubleValue() > 0) {
+			if (amount.doubleValue() < 0) {
 				description = m.group(1);
 				int idx = description.indexOf("TRANSACTIONAMOUNTNEWBALANCE");
 				description = (idx > 0 ) ? description.substring(idx + 27) : description;
