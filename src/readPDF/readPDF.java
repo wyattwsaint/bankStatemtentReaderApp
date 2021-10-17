@@ -1,6 +1,8 @@
 package readPDF;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,15 +31,17 @@ public class readPDF {
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		JFrame mainFrame = new JFrame("Saint Statement");
-		mainFrame.setBounds(6, 6, 500, 500);
+		mainFrame.setBounds(6, 6, 1000, 800);
+		mainFrame.setLayout(new BorderLayout(2, 2));
 		mainFrame.setVisible(true);
+		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel catPanel = new JPanel();
 		catPanel.setBounds(2, 2, 5, 5);
 		catPanel.setOpaque(true);
-		catPanel.setBackground(Color.BLACK);
-		mainFrame.add(catPanel);
+		catPanel.setBackground(Color.BLUE);
+		mainFrame.add(catPanel, BorderLayout.CENTER);
 		
 		
 		
