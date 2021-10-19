@@ -1,8 +1,12 @@
 package readPDF;
 
+<<<<<<< HEAD
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+=======
+import java.awt.Color;
+>>>>>>> 7c75821e6bbc423f44f2ada603456ef7fa46e3fb
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,6 +24,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+<<<<<<< HEAD
+=======
+import javax.swing.GroupLayout;
+>>>>>>> 7c75821e6bbc423f44f2ada603456ef7fa46e3fb
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -29,6 +37,8 @@ import org.apache.pdfbox.text.PDFTextStripper;
 public class readPDF {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
+		
+		GUI();
 
 		JFrame mainFrame = new JFrame("Saint Statement");
 		mainFrame.setBounds(6, 6, 1000, 800);
@@ -230,5 +240,30 @@ public class readPDF {
 			hash.newLine();
 			hash.flush();
 		}
+	}
+	
+	static void GUI() {
+		
+		JFrame mainPage = new JFrame();
+		JPanel mainPanel = new JPanel();
+		JPanel nextPanel = new JPanel();
+		
+		GroupLayout frameLayout = new GroupLayout(mainPage.getContentPane());
+		mainPage.setVisible(true);
+		mainPage.getContentPane().setLayout(frameLayout);
+		mainPage.setBounds(6, 6, 800, 800);
+		mainPage.getContentPane().setBackground(Color.BLACK);
+		mainPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		mainPanel.setBounds(20, 20, 700, 50);
+		mainPanel.setBackground(Color.YELLOW);
+		mainPage.add(mainPanel);
+		
+		nextPanel.setBounds(20, 100, 700, 50);
+		nextPanel.setBackground(Color.YELLOW);
+		mainPage.add(nextPanel);
+		
+		
+		
 	}
 }

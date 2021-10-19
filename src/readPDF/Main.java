@@ -2,41 +2,52 @@ package readPDF;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import readPDF.celleditor.CategoryEditor;
+import readPDF.cell.CategoryEditor;
+import readPDF.cell.DescriptionRenderer;
 
 import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JTable;
-import java.awt.CardLayout;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.SwingConstants;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -44,16 +55,14 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 public class Main {
@@ -61,12 +70,18 @@ public class Main {
 	JFrame frame;
 	private Category catFrame;
 	private JTable tblTransactions;
-	private JLabel lblSummary;
+	TableRowSorter<TableModel> sorter;
 	DefaultTableModel model;
 	PropertiesConfiguration config;
 	String[][] categoryData;
 	ArrayList<String> categories;
 	HashMap<String, Double> summary = new HashMap<>();
+	JPanel summaryPanel;
+	JLabel summaryLabel;
+	int count = 0;
+	ArrayList<JLabel> labels = new ArrayList<JLabel>();
+	GroupLayout summaryLayout;
+	GroupLayout.SequentialGroup summarySeqGroup;
 
 	/**
 	 * Launch the application.
@@ -97,6 +112,7 @@ public class Main {
 	 * Initialize the contents of the frame.
 	 * @throws ConfigurationException 
 	 */
+	@SuppressWarnings("static-access")
 	private void initialize() {
 		
 		loadCategories();
@@ -104,6 +120,7 @@ public class Main {
 		frame = new JFrame("Saint Statements");
 		frame.setBounds(50, 50, 1400, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+<<<<<<< HEAD
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 		
 		JDesktopPane desktopPane = new JDesktopPane();
@@ -139,15 +156,13 @@ public class Main {
 		tblTransactions.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tblTransactions.getColumnModel().getColumn(1).setPreferredWidth(500);
 		tblTransactions.getColumnModel().getColumn(2).setPreferredWidth(100);
+=======
+		GroupLayout frameLayout = new GroupLayout(frame.getContentPane());
+		frame.getContentPane().setLayout(frameLayout);
+>>>>>>> 7c75821e6bbc423f44f2ada603456ef7fa46e3fb
 		
-		JScrollPane scrollPane = new JScrollPane( tblTransactions );
-		scrollPane.setPreferredSize(new Dimension(700, 500));
-		
-		transactionPanel.add(scrollPane);
-		desktopPane.add(transactionPanel);
-
-		JButton btnNewButton = new JButton("Open Statement");
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		JButton newBtn = new JButton("Open Statement");
+		newBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JFileChooser chooser = new JFileChooser();
@@ -164,11 +179,8 @@ public class Main {
 		        }
 			}
 		});
-		btnNewButton.setBounds(6, 6, 131, 29);
-		desktopPane.add(btnNewButton);
 		
 		JButton catBtn = new JButton("View Categories");
-		catBtn.setBounds(138, 6, 140, 29);
 		catBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -176,10 +188,8 @@ public class Main {
 				frame.setVisible(false);
 			}
 		});
-		desktopPane.add(catBtn);
 		
 		JButton reloadBtn = new JButton("Reload Data");
-		reloadBtn.setBounds(280, 6, 140, 29);
 		reloadBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -190,10 +200,8 @@ public class Main {
 				}
 			}
 		});
-		desktopPane.add(reloadBtn);
 		
 		JButton saveBtn = new JButton("Save Data");
-		saveBtn.setBounds(430, 6, 140, 29);
 		saveBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -209,9 +217,116 @@ public class Main {
 				}
 			}
 		});
-		desktopPane.add(saveBtn);
+		
+
+		JPanel btnPanel = new JPanel();
+		//btnPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		GroupLayout btnLayout = new GroupLayout(btnPanel);
+		btnLayout.setHorizontalGroup(
+			btnLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
+				.addGroup(btnLayout.createSequentialGroup()
+					.addComponent(newBtn)
+					.addComponent(reloadBtn)
+					.addComponent(catBtn)
+					.addComponent(saveBtn)
+				)
+		);
+		
+		summaryLabel = new JLabel("Summary of transactions");
+		summaryLabel.setVisible(false);
+		
+		//summaryPanel = new JPanel(new GridLayout(0, 3, 5, 5));
+		summaryPanel = new JPanel();
+		//summaryPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		summaryLayout = new GroupLayout(summaryPanel);
+		summarySeqGroup = summaryLayout.createSequentialGroup();
+		summaryLayout.setHorizontalGroup(
+			summaryLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
+				.addGroup(summarySeqGroup)
+		);
+		summaryPanel.setVisible(false);
+
+		JLabel transactionsLabel = new JLabel("Transactions");
+		String[] columnNames = {"Category","Description","Amount"};
+		model = new DefaultTableModel(columnNames, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+			    return (column == 0);
+			}
+		};
+		
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setVerticalAlignment(SwingConstants.TOP);
+		
+		tblTransactions = new JTable(model);
+		tblTransactions.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		tblTransactions.setGridColor(Color.BLACK);
+		tblTransactions.setIntercellSpacing(new Dimension(8,5));
+		tblTransactions.getColumnModel().getColumn(0).setCellEditor(new CategoryEditor(categories));
+		tblTransactions.getColumnModel().getColumn(0).setPreferredWidth(140);
+		tblTransactions.getColumnModel().getColumn(0).setMaxWidth(180);
+		tblTransactions.getColumnModel().getColumn(0).setCellRenderer(renderer);
+		tblTransactions.getColumnModel().getColumn(1).setPreferredWidth(400);
+		tblTransactions.getColumnModel().getColumn(1).setCellRenderer(new DescriptionRenderer());
+		tblTransactions.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tblTransactions.getColumnModel().getColumn(2).setMaxWidth(100);
+		tblTransactions.getColumnModel().getColumn(2).setCellRenderer(renderer);
+		tblTransactions.getColumnModel().getColumn(2).setCellEditor(null);
+		
+		sorter = new TableRowSorter<>(tblTransactions.getModel());
+		tblTransactions.setRowSorter(sorter);
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		sorter.setSortKeys(sortKeys);
+		sorter.sort();
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(tblTransactions);
+		
+		/*
+		 * btnPanel
+		 * summaryLabel
+		 * transactionsLabel
+		 * scrollPane
+		 */
+		frameLayout.setHorizontalGroup(
+			frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addGroup(frameLayout.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addGroup(frameLayout.createSequentialGroup()
+						.addGap(6, 6, 6)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+					)	
+					.addComponent(summaryPanel, 634, 634, Short.MAX_VALUE)
+					.addGroup(frameLayout.createSequentialGroup()
+						.addGroup(frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+							.addComponent(transactionsLabel)
+							.addComponent(summaryLabel)
+						)
+						.addGap(0, 0, Short.MAX_VALUE)
+					)
+					.addComponent(btnPanel, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+				)
+				.addContainerGap()
+			)
+		);
+		
+		frameLayout.setVerticalGroup(
+			frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
+			.addGroup(frameLayout.createSequentialGroup()
+				.addComponent(btnPanel, 35, 35, 35)
+				.addComponent(summaryLabel)
+				.addGap(5)
+				.addComponent(summaryPanel, 100, 100, 100)
+				.addComponent(transactionsLabel)
+				.addGap(5)
+				.addComponent(scrollPane)
+			)
+		);
 		
 		frame.setVisible(true);
+		frame.pack();
 		
 		catFrame = new Category(categoryData, this);
 	}
@@ -237,24 +352,27 @@ public class Main {
 		BigDecimal defaultVal = new BigDecimal("0.00");
 		String category = null;
 		
-		String regex = "(.+?(?=[0-9][,]?[0-9]{3}.[0-9]{2}))([0-9][,]?[0-9]{3}.[0-9]{2})([0-9]{2}\\/[0-9]{2}\\s)(-[0-9]?[,]?[0-9]{0,3}.[0-9]{2})";
+		String regex = "(.+?(?=[0-9][,]?[0-9]{3}.[0-9]{2}))([0-9][,]?[0-9]{3}.[0-9]{2})([0-9]{2}\\/[0-9]{2}\\s)([-]?[0-9]?[,]?[0-9]{0,3}.[0-9]{2})";
 		Matcher m = Pattern.compile(regex).matcher(pdfText);
 		while(m.find()) {
 			//System.out.println(m.group(0));
-			description = m.group(1);
-			
 			amount = new BigDecimal(m.group(4).replace(",",""));
 			amount.setScale(2, RoundingMode.UP);
 			
-			// Check if transaction is a bill
-			category = getCategory(description);
-			
-			Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
-			model.addRow(newRow);
-			
-			currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
-			currAmount.setScale(2, RoundingMode.UP);
-			summary.put(category, (currAmount.add(amount)).doubleValue());
+			if (amount.doubleValue() < 0) {
+				description = m.group(1);
+				int idx = description.indexOf("TRANSACTIONAMOUNTNEWBALANCE");
+				description = (idx > 0 ) ? description.substring(idx + 27) : description;
+				
+				category = getCategory(description);
+				
+				Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
+				model.addRow(newRow);
+				
+				currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
+				currAmount.setScale(2, RoundingMode.UP);
+				summary.put(category, (currAmount.add(amount)).doubleValue());
+			}
 		}
 		showSummary();
 	}
@@ -302,32 +420,57 @@ public class Main {
 		String category;
 		
 		for(int i=0; i < rowCount; i++) {
-			category = getCategory(String.valueOf(model.getValueAt(i, 1)));
-			model.setValueAt(category, i, 0);
+			category = getCategory(String.valueOf(tblTransactions.getValueAt(i, 1)));
+			tblTransactions.setValueAt(category, i, 0);
 			
-			amount = new BigDecimal(model.getValueAt(i, 2).toString());
+			amount = new BigDecimal(tblTransactions.getValueAt(i, 2).toString());
 			
 			currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
 			summary.put(category, (currAmount.add(amount)).doubleValue());
 		}
+		sorter.sort();
 		showSummary();
 	}
 	
 	public void showSummary() {
-		String summaryStr = "<html>";
-		int idx = 1;
 		
+		int count = labels.size();
+		System.out.println("Removing " + count + " labels");
+		for(int i = 0; i < count; i++) {
+			summaryPanel.remove(labels.get(0));
+			labels.remove(0);
+		}
+		
+		//summaryPanel.revalidate();
+		//summaryPanel.repaint();
+		
+		JLabel tempLabel;
 		for(String key : summary.keySet()) {
 			BigDecimal value = new BigDecimal(summary.get(key).toString());
 			value.setScale(2, RoundingMode.CEILING);
 			
-			summaryStr += "<span style='float:left; padding-right:20px;'>" + key + ": " + String.format("%.2f", value) + "</span>"
-				+ (idx % 4 == 0? "<br />" : "\t\t\t\t");
-			idx++;
+			tempLabel = new JLabel(key + ": " + String.format("%.2f", value));
+			tempLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			tempLabel.setVerticalAlignment(SwingConstants.CENTER);
+			tempLabel.setOpaque(true);
+			tempLabel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+			tempLabel.setForeground(Color.WHITE);
+			tempLabel.setBackground(Color.DARK_GRAY);
+			
+			//summaryPanel.add(tempLabel);
+			summaryLayout.createSequentialGroup().addComponent(tempLabel);
+			labels.add(tempLabel);
 		}
-		summaryStr += "</html>";
 		
-		lblSummary.setText(summaryStr);
+
+		System.out.println("Adding " + labels.size() + " labels");
+
+		summaryLabel.setVisible(true);
+		summaryPanel.setVisible(true);
+		
+		summaryPanel.revalidate();
+		summaryPanel.repaint();
+		
 	}
 	
 	public void save() throws ParseException, DocumentException, FileNotFoundException {
@@ -345,36 +488,59 @@ public class Main {
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
 		    fileToSave = fileChooser.getSelectedFile();
 		    
+		    if (FilenameUtils.getExtension(fileToSave.getName()).equalsIgnoreCase("pdf")) {
+		        // filename is OK as-is
+		    } else {
+		    	fileToSave = new File(fileToSave.toString() + ".pdf");  // append .xml if "foo.jpg.xml" is OK
+		        //file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".xml"); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+		    }
+		    
 		    // create pdf here
 		    Document doc = new Document();
 		    PdfWriter.getInstance(doc, new FileOutputStream(fileToSave));
 		    doc.open();
 		    
-		    PdfPTable summaryTable = new PdfPTable(3);
-		    summaryTable.setTotalWidth(520);
-		    summaryTable.setLockedWidth(true);
-		    
-		    for(String key : summary.keySet()) {
-		    	summaryTable.addCell(new PdfPCell(new Paragraph(key + ": " + summary.get(key).toString())));
-			}
-
 		    doc.add(new Paragraph("Summary", boldFont));
-		    doc.add(summaryTable);
+		    
+		    //String content = "";
+		    Chunk c;
+		    for(String key : summary.keySet()) {
+		    	
+		    	BigDecimal value = new BigDecimal(summary.get(key).toString());
+				value.setScale(2, RoundingMode.CEILING);
+		    	//content += key + ": " + String.format("%.2f", value) + "    ";
+				c = new Chunk(key + ": " + summary.get(key).toString());
+				c.setBackground(BaseColor.LIGHT_GRAY, 5, 0, 0, 5);
+		    	doc.add(c);
+		    	doc.add(new Chunk("       "));
+		    }
+		    //doc.add(new Paragraph(content));
+		    
+		    doc.add(new Paragraph(Chunk.NEWLINE));
+		    doc.add(new Paragraph("Transacations", boldFont));
+		    doc.add(new Paragraph(Chunk.NEWLINE));
 		    
 		    PdfPTable transactionTable = new PdfPTable(3);
-		    transactionTable.setTotalWidth(new float[] {60, 400, 60});
+		    transactionTable.setTotalWidth(new float[] {80, 360, 80});
 		    transactionTable.setLockedWidth(true);
 		    
-		    doc.add(new Paragraph(""));
-		    doc.add(new Paragraph("Transacations", boldFont));
-		    transactionTable.addCell(new PdfPCell(new Paragraph("Category")));
-		    transactionTable.addCell(new PdfPCell(new Paragraph("Description")));
-		    transactionTable.addCell(new PdfPCell(new Paragraph("Amount")));
+		    PdfPCell catCell = new PdfPCell(new Paragraph("Category"));
+		    catCell.setPadding(8);
+		    
+		    PdfPCell descCell = new PdfPCell(new Paragraph("Description"));
+		    descCell.setPadding(8);
+		    
+		    PdfPCell amtCell = new PdfPCell(new Paragraph("Amount"));
+		    amtCell.setPadding(8);
+		    
+		    transactionTable.addCell(catCell);
+		    transactionTable.addCell(descCell);
+		    transactionTable.addCell(amtCell);
 		    
 		    for(int i=0; i < tblTransactions.getRowCount(); i++) {
-				category = String.valueOf(model.getValueAt(i, 0));
-				desc = String.valueOf(model.getValueAt(i, 1));
-				amount = model.getValueAt(i, 2).toString();
+				category = String.valueOf(tblTransactions.getValueAt(i, 0));
+				desc = String.valueOf(tblTransactions.getValueAt(i, 1));
+				amount = tblTransactions.getValueAt(i, 2).toString();
 				
 				transactionTable.addCell(new PdfPCell(new Paragraph(category)));
 				transactionTable.addCell(new PdfPCell(new Paragraph(desc)));
