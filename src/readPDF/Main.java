@@ -321,20 +321,18 @@ public class Main {
 			amount = new BigDecimal(m.group(4).replace(",",""));
 			amount.setScale(2, RoundingMode.UP);
 			
-			if (amount.doubleValue() < 0) {
-				description = m.group(1);
-				int idx = description.indexOf("TRANSACTIONAMOUNTNEWBALANCE");
-				description = (idx > 0 ) ? description.substring(idx + 27) : description;
-				
-				category = getCategory(description);
-				
-				Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
-				model.addRow(newRow);
-				
-				currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
-				currAmount.setScale(2, RoundingMode.UP);
-				summary.put(category, (currAmount.add(amount)).doubleValue());
-			}
+			description = m.group(1);
+			int idx = description.indexOf("TRANSACTIONAMOUNTNEWBALANCE");
+			description = (idx > 0 ) ? description.substring(idx + 27) : description;
+			
+			category = (amount.doubleValue() < 0) ? getCategory(description) : "DEPOSIT";
+			
+			Object[] newRow = new Object[] {category, description, String.valueOf(amount) };
+			model.addRow(newRow);
+			
+			currAmount = (summary.containsKey(category)) ? new BigDecimal(summary.get(category)) : defaultVal;
+			currAmount.setScale(2, RoundingMode.UP);
+			summary.put(category, (currAmount.add(amount)).doubleValue());
 		}
 		showSummary();
 	}

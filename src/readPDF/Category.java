@@ -3,11 +3,13 @@ package readPDF;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -43,21 +45,22 @@ public class Category {
 		this.parent = parent;
 		this.categoryData = catData;
 		frame = new JFrame();
-		frame.setBounds(100, 100, 707, 700);
+		frame.setBounds(50, 50, 800, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		SpringLayout layout = new SpringLayout();
 		Container pane = frame.getContentPane();
-		pane.setLayout(layout);
+		GroupLayout frameLayout = new GroupLayout(pane);
+		pane.setLayout(frameLayout);
 		
 		JLabel lbl = new JLabel("Categories");
-		pane.add(lbl);
 		
 		String[] columnNames = {"Category","Description"};
 		model = new DefaultTableModel(catData, columnNames);
 				
 		tblCats = new JTable(model);
-		tblCats.setBorder(new LineBorder(new Color(0, 0, 0)));
+		tblCats.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		tblCats.setGridColor(Color.BLACK);
+		tblCats.setIntercellSpacing(new Dimension(8,5));
 		tblCats.setAutoCreateRowSorter(true);
 		tblCats.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -71,7 +74,6 @@ public class Category {
 				model.addRow(new Object[] {"temp", "temp"});
 			}
 		});
-		pane.add(newCatBtn);
 		
 		JButton cancelBtn = new JButton("Cancel");
 		cancelBtn.addMouseListener(new MouseAdapter() {
@@ -81,7 +83,6 @@ public class Category {
 				frame.setVisible(false);
 			}
 		});
-		pane.add(cancelBtn);
 		
 		JButton deleteBtn = new JButton("Delete Row");
 		deleteBtn.setEnabled(false);
@@ -99,7 +100,6 @@ public class Category {
 		        }
 			}
 		});
-		pane.add(deleteBtn);
 		
 		JButton saveBtn = new JButton("Save Categories");
 		saveBtn.setEnabled(false);
@@ -109,7 +109,18 @@ public class Category {
 				saveCategories();
 			}
 		});
-		pane.add(saveBtn);
+
+		JPanel btnPanel = new JPanel();
+		GroupLayout btnLayout = new GroupLayout(btnPanel);
+		btnLayout.setHorizontalGroup(
+			btnLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
+				.addGroup(btnLayout.createSequentialGroup()
+					.addComponent(newCatBtn)
+					.addComponent(cancelBtn)
+					.addComponent(deleteBtn)
+					.addComponent(saveBtn)
+				)
+		);
 		
 		tblCats.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent event) {
@@ -124,23 +135,35 @@ public class Category {
 			}
 		});
 		
-		layout.putConstraint(SpringLayout.NORTH, lbl, 30, SpringLayout.NORTH, pane);
-		layout.putConstraint(SpringLayout.WEST, lbl, 20, SpringLayout.WEST, pane);
+		frameLayout.setHorizontalGroup(
+			frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addGroup(frameLayout.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addGroup(frameLayout.createSequentialGroup()
+						.addGap(6, 6, 6)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+					)	
+					.addGroup(frameLayout.createSequentialGroup()
+						.addGap(0, 0, Short.MAX_VALUE)
+					)
+					.addComponent(btnPanel, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+				)
+				.addContainerGap()
+			)
+		);
 		
-		layout.putConstraint(SpringLayout.NORTH, scrollPane, 45, SpringLayout.NORTH, pane);
-		layout.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.WEST, pane);
-
-		layout.putConstraint(SpringLayout.NORTH, newCatBtn, 0, SpringLayout.NORTH, pane);
-		layout.putConstraint(SpringLayout.WEST, newCatBtn, 20, SpringLayout.WEST, pane);
+		frameLayout.setVerticalGroup(
+			frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
+			.addGroup(frameLayout.createSequentialGroup()
+				.addComponent(btnPanel, 35, 35, 35)
+				.addGap(5)
+				.addComponent(scrollPane)
+			)
+		);
 		
-		layout.putConstraint(SpringLayout.NORTH, cancelBtn, 0, SpringLayout.NORTH, pane);
-		layout.putConstraint(SpringLayout.WEST, cancelBtn, 5, SpringLayout.EAST, newCatBtn);
+		frame.pack();
 		
-		layout.putConstraint(SpringLayout.NORTH, deleteBtn, 0, SpringLayout.NORTH, pane);
-		layout.putConstraint(SpringLayout.WEST, deleteBtn, 5, SpringLayout.EAST, cancelBtn);
-
-		layout.putConstraint(SpringLayout.NORTH, saveBtn, 0, SpringLayout.NORTH, pane);
-		layout.putConstraint(SpringLayout.WEST, saveBtn, 5, SpringLayout.EAST, deleteBtn);
 	}
 	
 	public void setVisible(boolean bool) {
