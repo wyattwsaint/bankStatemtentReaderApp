@@ -1,5 +1,6 @@
 package readPDF;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,12 +18,18 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.GroupLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 public class readPDF {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
+		
+		GUI();
 
 
 		File file = new File("C:\\Users\\wmsai\\Desktop\\BankStatement.pdf");
@@ -209,5 +216,30 @@ public class readPDF {
 			hash.newLine();
 			hash.flush();
 		}
+	}
+	
+	static void GUI() {
+		
+		JFrame mainPage = new JFrame();
+		JPanel mainPanel = new JPanel();
+		JPanel nextPanel = new JPanel();
+		
+		GroupLayout frameLayout = new GroupLayout(mainPage.getContentPane());
+		mainPage.setVisible(true);
+		mainPage.getContentPane().setLayout(frameLayout);
+		mainPage.setBounds(6, 6, 800, 800);
+		mainPage.getContentPane().setBackground(Color.BLACK);
+		mainPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		mainPanel.setBounds(20, 20, 700, 50);
+		mainPanel.setBackground(Color.YELLOW);
+		mainPage.add(mainPanel);
+		
+		nextPanel.setBounds(20, 100, 700, 50);
+		nextPanel.setBackground(Color.YELLOW);
+		mainPage.add(nextPanel);
+		
+		
+		
 	}
 }
