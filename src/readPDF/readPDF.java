@@ -1,12 +1,9 @@
 package readPDF;
 
-<<<<<<< HEAD
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-=======
 import java.awt.Color;
->>>>>>> 7c75821e6bbc423f44f2ada603456ef7fa46e3fb
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,37 +21,25 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-<<<<<<< HEAD
-=======
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
->>>>>>> 7c75821e6bbc423f44f2ada603456ef7fa46e3fb
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.itextpdf.text.Font;
+
 public class readPDF {
 
-	public static void main(String[] args) throws IOException, InterruptedException {
-		
-		GUI();
+	public static String data;
 
-		JFrame mainFrame = new JFrame("Saint Statement");
-		mainFrame.setBounds(6, 6, 1000, 800);
-		mainFrame.setLayout(new BorderLayout(2, 2));
-		mainFrame.setVisible(true);
-		
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JPanel catPanel = new JPanel();
-		catPanel.setBounds(2, 2, 5, 5);
-		catPanel.setOpaque(true);
-		catPanel.setBackground(Color.BLUE);
-		mainFrame.add(catPanel, BorderLayout.CENTER);
-		
-		
-		
+	public static void main(String[] args) throws IOException, InterruptedException {
+
 		File file = new File("C:\\Users\\wmsai\\Desktop\\BankStatement.pdf");
 		PDFTextStripper stripper = new PDFTextStripper();
 		BufferedWriter bw = new BufferedWriter(new FileWriter("bankData", StandardCharsets.UTF_8));
@@ -63,6 +48,8 @@ public class readPDF {
 		bw.write(temp);
 		bw.flush();
 		bw.close();
+
+		readPDF.data = temp;
 
 		BufferedReader buffRead = new BufferedReader(new FileReader("bankData"));
 		BufferedWriter buffWrite = new BufferedWriter(new FileWriter("pdfText"));
@@ -234,36 +221,22 @@ public class readPDF {
 
 		}
 		System.out.println("Success");
-		for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+		setData();
+		gui();
+	}
 
-			hash.write(entry.getKey() + ":" + entry.getValue());
-			hash.newLine();
-			hash.flush();
-		}
+	public static String setData() {
+
+		String data = readPDF.data;
+		return data;
+
 	}
 	
-	static void GUI() {
+	static void gui() {
 		
-		JFrame mainPage = new JFrame();
-		JPanel mainPanel = new JPanel();
-		JPanel nextPanel = new JPanel();
-		
-		GroupLayout frameLayout = new GroupLayout(mainPage.getContentPane());
-		mainPage.setVisible(true);
-		mainPage.getContentPane().setLayout(frameLayout);
-		mainPage.setBounds(6, 6, 800, 800);
-		mainPage.getContentPane().setBackground(Color.BLACK);
-		mainPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		mainPanel.setBounds(20, 20, 700, 50);
-		mainPanel.setBackground(Color.YELLOW);
-		mainPage.add(mainPanel);
-		
-		nextPanel.setBounds(20, 100, 700, 50);
-		nextPanel.setBackground(Color.YELLOW);
-		mainPage.add(nextPanel);
-		
-		
+		NewJFrame newFrame = new NewJFrame();
+		newFrame.main(null);
 		
 	}
+
 }
