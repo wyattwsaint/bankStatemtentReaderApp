@@ -87,7 +87,15 @@ public class readPDF {
 		BufferedWriter hash = new BufferedWriter(new FileWriter("hashMap"));
 		BufferedWriter clearData = new BufferedWriter(new FileWriter("csvFile"));
 		LineNumberReader lineNum = new LineNumberReader(new FileReader("bankData"));
-		String[] billNames = { "ROYAL FARMS" };
+		String[] billNames = { "ROYAL FARMS", "SUNOCO", "PRIME", "CAPITAL REGION", "AMAZON.COM", "CHECK", "DFAS", 
+				"PROGRESS", "ASPEN", "DUNKIN", "PENN WASTE", "PP ELEC", "EZPASS", "PA DRIVER", "QUIK QUALITY", 
+				"PHS SBO", "AAFES", "BILL SERVICING", "SUSQUEHANNA TOWNSHIP", 
+				"COSTCO", "ALDI", "TRS TRR", "WM SUPERCENTER", "WAL-MART", "PIZZA GRILLE", "LOWE'S", "DAIRY QUEEN",
+				"PAYPAL", "BANNER LIFE", "NAVIGATORS", "TITHE.LY", "7-ELEVEN", "CLOUD 10", "TURKEY HILL", "INSTACART",
+				"34474 HARRISBURG", "IRS TREAS", "WAWA", "FREEDOM", "ONCE UPON A CHILD", "SHEETZ", "GIANT", 
+				"DISCIPLEMAKERS", "USAA", "LOAN 004", "A1 EXPRESS", "PROTECTIVE", "RUTTER'S", "MALICKS", "GET GO", 
+				"PANERA", "MCDONALD'S", "PEPBOYS", "AVEN", "VERIZON", "RETURN ADJUSTMENT", "MASA HIBACHI", 
+				"UNITED CONCORDIA", "SHARE 0001", "SHARE 0030", "WIRELESS SVCS", "THRIFT BOOKS", "HAND AND STONE"};
 		String line;
 		while ((line = lineNum.readLine()) != null) {
 			BufferedWriter csvFile = new BufferedWriter(new FileWriter("csvFile", true));
