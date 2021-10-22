@@ -125,9 +125,10 @@ public class readPDF {
 						String trans13 = trans12.substring(0, 40);
 						String trans14 = trans10[3].substring(0);
 
-						// System.out.println(trans13);
-						// System.out.println("Enter category");
-						hashMap.put(trans13, "misc");
+						//System.out.println(trans13);
+						//System.out.println("Enter category");
+						//String cat3 = scanner.next();
+						//hashMap.put(trans13, cat3);
 						String category = hashMap.get(trans13);
 						hashMap2.put(trans13, category);
 
@@ -147,9 +148,10 @@ public class readPDF {
 						String tran3 = tran2.substring(0, 40);
 						String tran4 = tran[2].substring(0);
 
-						// System.out.println(tran3);
-						// System.out.println("Enter category");
-						hashMap.put(tran3, "misc");
+						//System.out.println(tran3);
+						//System.out.println("Enter category");
+						//String cat2 = scanner.next();
+						//hashMap.put(tran3, cat2);
 						String category = hashMap.get(tran3);
 						hashMap2.put(tran3, category);
 
@@ -169,10 +171,10 @@ public class readPDF {
 						String trans4 = trans3.substring(0, 40);
 						String trans5 = trans1[1].substring(0);
 
-						// System.out.println(trans4);
-						// System.out.println("Enter category");
-
-						hashMap.put(trans4, "misc");
+						//System.out.println(trans4);
+						//System.out.println("Enter category");
+						//String cat1 = scanner.next();
+						//hashMap.put(trans4, cat1);
 						String category = hashMap.get(trans4);
 						hashMap2.put(trans4, category);
 
@@ -201,9 +203,10 @@ public class readPDF {
 							String[] data44 = priceLine.split("/", 2);
 							String data55 = data44[1].substring(0);
 
-							// System.out.println(data33);
-							// System.out.println("Enter category");
-							hashMap.put(data33, "misc");
+							//System.out.println(data33);
+							//System.out.println("Enter category");
+							//String cat = scanner.next();
+							//hashMap.put(data33, cat);
 							String category = hashMap.get(data33);
 							hashMap2.put(data33, category);
 
@@ -229,8 +232,8 @@ public class readPDF {
 
 		}
 		System.out.println("Success");
-		setData();
-		gui();
+		//setData();
+		//gui();
 	}
 
 	public static String setData() {
