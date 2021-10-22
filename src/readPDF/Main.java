@@ -78,6 +78,7 @@ public class Main {
 	HashMap<String, Double> summary = new HashMap<>();
 	JPanel summaryPanel;
 	JLabel summaryLabel;
+	JLabel transCountLabel;
 	int count = 0;
 	ArrayList<JLabel> labels = new ArrayList<JLabel>();
 	GroupLayout summaryLayout;
@@ -209,6 +210,9 @@ public class Main {
 		summaryPanel.setVisible(false);
 
 		JLabel transactionsLabel = new JLabel("Transactions");
+		transCountLabel = new JLabel("");
+		transCountLabel.setVisible(false);
+		
 		String[] columnNames = {"Category","Description","Amount"};
 		model = new DefaultTableModel(columnNames, 0) {
 			@Override
@@ -262,12 +266,11 @@ public class Main {
 					)	
 					.addComponent(summaryPanel, 634, 634, Short.MAX_VALUE)
 					.addGroup(frameLayout.createSequentialGroup()
-						.addGroup(frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-							.addComponent(transactionsLabel)
-							.addComponent(summaryLabel)
-						)
-						.addGap(0, 0, Short.MAX_VALUE)
+						.addComponent(transactionsLabel)
+						.addGap(6,6,6)
+						.addComponent(transCountLabel)
 					)
+					.addComponent(summaryLabel)
 					.addComponent(btnPanel, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
 				)
 				.addContainerGap()
@@ -281,7 +284,11 @@ public class Main {
 				.addComponent(summaryLabel)
 				.addGap(5)
 				.addComponent(summaryPanel, 100, 100, 100)
-				.addComponent(transactionsLabel)
+				.addGroup(frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addComponent(transactionsLabel)
+					.addComponent(transCountLabel)
+				)
+				
 				.addGap(5)
 				.addComponent(scrollPane)
 			)
@@ -335,6 +342,9 @@ public class Main {
 			summary.put(category, (currAmount.add(amount)).doubleValue());
 		}
 		showSummary();
+		
+		transCountLabel.setText(String.valueOf(model.getRowCount()));
+		transCountLabel.setVisible(true);
 	}
 	
 	private String getCategory(String description) {
