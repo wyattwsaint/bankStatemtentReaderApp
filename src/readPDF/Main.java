@@ -79,6 +79,7 @@ public class Main {
 	JPanel summaryPanel;
 	JLabel summaryLabel;
 	JLabel transCountLabel;
+	JLabel balanceLabel;
 	int count = 0;
 	ArrayList<JLabel> labels = new ArrayList<JLabel>();
 	GroupLayout summaryLayout;
@@ -209,9 +210,12 @@ public class Main {
 		);
 		summaryPanel.setVisible(false);
 
-		JLabel transactionsLabel = new JLabel("Transactions");
+		JLabel transactionsLabel = new JLabel("Transactions:");
 		transCountLabel = new JLabel("");
 		transCountLabel.setVisible(false);
+		
+		balanceLabel = new JLabel("");
+		balanceLabel.setVisible(false);
 		
 		String[] columnNames = {"Category","Description","Amount"};
 		model = new DefaultTableModel(columnNames, 0) {
@@ -269,6 +273,8 @@ public class Main {
 						.addComponent(transactionsLabel)
 						.addGap(6,6,6)
 						.addComponent(transCountLabel)
+						.addGap(20)
+						.addComponent(balanceLabel)
 					)
 					.addComponent(summaryLabel)
 					.addComponent(btnPanel, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
@@ -287,6 +293,7 @@ public class Main {
 				.addGroup(frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 					.addComponent(transactionsLabel)
 					.addComponent(transCountLabel)
+					.addComponent(balanceLabel)
 				)
 				
 				.addGap(5)
@@ -311,9 +318,11 @@ public class Main {
 		
 		int beginIdx = pdfText.indexOf("CHECKING  ID 0004");
 		int endIdx = pdfText.indexOf("SUMMER PAY SHARES  ID 0005");
-		System.out.println("Begin: " + beginIdx + "   End: " + endIdx);
+		//System.out.println("Begin: " + beginIdx + "   End: " + endIdx);
 		
 		pdfText = pdfText.substring(beginIdx + 17, endIdx - 1);
+		
+		//System.out.println(pdfText);
 		
 		String description = null;
 		BigDecimal amount;
@@ -345,6 +354,8 @@ public class Main {
 		
 		transCountLabel.setText(String.valueOf(model.getRowCount()));
 		transCountLabel.setVisible(true);
+		
+		setBalances(pdfText);
 	}
 	
 	private String getCategory(String description) {
@@ -405,7 +416,7 @@ public class Main {
 	public void showSummary() {
 		
 		int count = labels.size();
-		System.out.println("Removing " + count + " labels");
+		//System.out.println("Removing " + count + " labels");
 		for(int i = 0; i < count; i++) {
 			summaryPanel.remove(labels.get(0));
 			labels.remove(0);
@@ -431,9 +442,8 @@ public class Main {
 			summaryLayout.createSequentialGroup().addComponent(tempLabel);
 			labels.add(tempLabel);
 		}
-		
 
-		System.out.println("Adding " + labels.size() + " labels");
+		//System.out.println("Adding " + labels.size() + " labels");
 
 		summaryLabel.setVisible(true);
 		summaryPanel.setVisible(true);
@@ -441,6 +451,28 @@ public class Main {
 		summaryPanel.revalidate();
 		summaryPanel.repaint();
 		
+	}
+	
+	public void setBalances(String text) {
+		//BEGINNING BALANCE 6,465.77
+		String beginRegex = "(BEGINNING\\sBALANCE\\s)([0-9]?[0-9]?[,]?[0-9]?[0-9]?[0-9].[0-9]{2})";
+		
+		//08/167,078.95ENDING BALANCE08/31
+		String endingRegex = "([0-9]{2}\\/[0-9]{2})([0-9]?[0-9]?[,]?[0-9]?[0-9]?[0-9].[0-9]{2})(ENDING\\sBALANCE)";
+		
+		String t = "";
+		Matcher m = Pattern.compile(beginRegex).matcher(text);
+		while(m.find()) {
+			t += m.group(1) + ": " + m.group(2);
+		}
+		
+		m = Pattern.compile(endingRegex).matcher(text);
+		while(m.find()) {
+			t += "     " + m.group(3) + ": " + m.group(2);
+		}
+		
+		balanceLabel.setText(t);
+		balanceLabel.setVisible(true);
 	}
 	
 	public void save() throws ParseException, DocumentException, FileNotFoundException {
