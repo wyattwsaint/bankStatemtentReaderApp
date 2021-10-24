@@ -7,6 +7,9 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,29 +77,24 @@ public class readPDF {
 		HashMap<String, String> hashMap = new HashMap<>();
 		HashMap<String, String> hashMap2 = new HashMap<>();
 
-		BufferedReader preHash = new BufferedReader(new FileReader("hashMap"));
-		String hashLine = null;
-		while ((hashLine = preHash.readLine()) != null) {
-			String[] parts = hashLine.split(":");
-			String name = parts[0].trim();
-			String number = parts[1].trim();
-			if (!name.equals("") && !number.equals(""))
-				hashMap.put(name, number);
-		}
+		Properties properties1 = new Properties();
+		properties1.load(new FileInputStream("data.properties"));
 
+		for (String key : properties1.stringPropertyNames()) {
+			hashMap.put(key, properties1.get(key).toString());
+		}
 		Scanner scanner = new Scanner(System.in);
-		BufferedWriter hash = new BufferedWriter(new FileWriter("hashMap"));
 		BufferedWriter clearData = new BufferedWriter(new FileWriter("csvFile"));
 		LineNumberReader lineNum = new LineNumberReader(new FileReader("bankData"));
-		String[] billNames = { "ROYAL FARMS", "SUNOCO", "PRIME", "CAPITAL REGION", "AMAZON.COM", "CHECK", "DFAS", 
-				"PROGRESS", "ASPEN", "DUNKIN", "PENN WASTE", "PP ELEC", "EZPASS", "PA DRIVER", "QUIK QUALITY", 
-				"PHS SBO", "AAFES", "BILL SERVICING", "SUSQUEHANNA TOWNSHIP", 
-				"COSTCO", "ALDI", "TRS TRR", "WM SUPERCENTER", "WAL-MART", "PIZZA GRILLE", "LOWE'S", "DAIRY QUEEN",
-				"PAYPAL", "BANNER LIFE", "NAVIGATORS", "TITHE.LY", "7-ELEVEN", "CLOUD 10", "TURKEY HILL", "INSTACART",
-				"34474 HARRISBURG", "IRS TREAS", "WAWA", "FREEDOM", "ONCE UPON A CHILD", "SHEETZ", "GIANT", 
-				"DISCIPLEMAKERS", "USAA", "LOAN 004", "A1 EXPRESS", "PROTECTIVE", "RUTTER'S", "MALICKS", "GET GO", 
-				"PANERA", "MCDONALD'S", "PEPBOYS", "AVEN", "VERIZON", "RETURN ADJUSTMENT", "MASA HIBACHI", 
-				"UNITED CONCORDIA", "SHARE 0001", "SHARE 0030", "WIRELESS SVCS", "THRIFT BOOKS", "HAND AND STONE"};
+		String[] billNames = { "ROYAL FARMS", "SUNOCO", "PRIME", "CAPITAL REGION", "AMAZON.COM", "CHECK", "DFAS",
+				"PROGRESS", "ASPEN", "DUNKIN", "PENN WASTE", "PP ELEC", "EZPASS", "PA DRIVER", "QUIK QUALITY",
+				"PHS SBO", "AAFES", "BILL SERVICING", "SUSQUEHANNA TOWNSHIP", "COSTCO", "ALDI", "TRS TRR",
+				"WM SUPERCENTER", "WAL-MART", "PIZZA GRILLE", "LOWE'S", "DAIRY QUEEN", "PAYPAL", "BANNER LIFE",
+				"NAVIGATORS", "TITHE.LY", "7-ELEVEN", "CLOUD 10", "TURKEY HILL", "INSTACART", "34474 HARRISBURG",
+				"IRS TREAS", "WAWA", "FREEDOM", "ONCE UPON A CHILD", "SHEETZ", "GIANT", "DISCIPLEMAKERS", "USAA",
+				"LOAN 004", "A1 EXPRESS", "PROTECTIVE", "RUTTER'S", "MALICKS", "GET GO", "PANERA", "MCDONALD'S",
+				"PEPBOYS", "AVEN", "VERIZON", "RETURN ADJUSTMENT", "MASA HIBACHI", "UNITED CONCORDIA", "SHARE 0001",
+				"SHARE 0030", "WIRELESS SVCS", "THRIFT BOOKS", "HAND AND STONE" };
 		String line;
 		while ((line = lineNum.readLine()) != null) {
 			BufferedWriter csvFile = new BufferedWriter(new FileWriter("csvFile", true));
@@ -123,12 +122,12 @@ public class readPDF {
 						String trans12 = trans11 + dashes;
 
 						String trans13 = trans12.substring(0, 40);
-						String trans14 = trans10[3].substring(0);
+						String trans14 = trans10[3].substring(3);
 
-						//System.out.println(trans13);
-						//System.out.println("Enter category");
-						//String cat3 = scanner.next();
-						//hashMap.put(trans13, cat3);
+						// System.out.println(trans13);
+						// System.out.println("Enter category");
+						// String cat3 = scanner.next();
+						// hashMap.put(trans13, "misc");
 						String category = hashMap.get(trans13);
 						hashMap2.put(trans13, category);
 
@@ -146,12 +145,12 @@ public class readPDF {
 						String tran1 = tran[0];
 						String tran2 = tran1 + dashes;
 						String tran3 = tran2.substring(0, 40);
-						String tran4 = tran[2].substring(0);
+						String tran4 = tran[2].substring(3);
 
-						//System.out.println(tran3);
-						//System.out.println("Enter category");
-						//String cat2 = scanner.next();
-						//hashMap.put(tran3, cat2);
+						// System.out.println(tran3);
+						// System.out.println("Enter category");
+						// String cat2 = scanner.next();
+						// hashMap.put(tran3, "misc");
 						String category = hashMap.get(tran3);
 						hashMap2.put(tran3, category);
 
@@ -169,12 +168,12 @@ public class readPDF {
 						String trans2 = trans1[0];
 						String trans3 = trans2 + dashes;
 						String trans4 = trans3.substring(0, 40);
-						String trans5 = trans1[1].substring(0);
+						String trans5 = trans1[1].substring(3);
 
-						//System.out.println(trans4);
-						//System.out.println("Enter category");
-						//String cat1 = scanner.next();
-						//hashMap.put(trans4, cat1);
+						// System.out.println(trans4);
+						// System.out.println("Enter category");
+						// String cat1 = scanner.next();
+						// hashMap.put(trans4, "misc");
 						String category = hashMap.get(trans4);
 						hashMap2.put(trans4, category);
 
@@ -201,12 +200,12 @@ public class readPDF {
 							String data22 = data.replaceAll(":", "") + dashes;
 							String data33 = data22.substring(0, 40);
 							String[] data44 = priceLine.split("/", 2);
-							String data55 = data44[1].substring(0);
+							String data55 = data44[1].substring(3);
 
-							//System.out.println(data33);
-							//System.out.println("Enter category");
-							//String cat = scanner.next();
-							//hashMap.put(data33, cat);
+							// System.out.println(data33);
+							// System.out.println("Enter category");
+							// String cat = scanner.next();
+							// hashMap.put(data33, "misc");
 							String category = hashMap.get(data33);
 							hashMap2.put(data33, category);
 
@@ -232,8 +231,15 @@ public class readPDF {
 
 		}
 		System.out.println("Success");
-		//setData();
-		//gui();
+
+		Properties properties = new Properties();
+		for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+			properties.put(entry.getKey(), entry.getValue());
+		}
+		properties.store(new FileOutputStream("data.properties"), null);
+
+		// setData();
+		// gui();
 	}
 
 	public static String setData() {
@@ -242,12 +248,39 @@ public class readPDF {
 		return data;
 
 	}
-	
+
 	static void gui() {
-		
+
 		NewJFrame newFrame = new NewJFrame();
 		newFrame.main(null);
-		
+
 	}
 
+	static void parseCSV() throws IOException {
+
+		String[] categories = { "TITHE", "ENTERTAINMENT", "GAS", "ELECTRIC", "WATER", "TRASH", "ARMYINCOME",
+				"PROGRESSINCOME", "ASPENINCOME", "MISC", "EATOUT", "CAR", "CITY", "AMAZON", "RETURNS", "PAYPAL",
+				"MANDYLIFE", "WYATTLIFE", "TRANSFER", "GIVING", "GROC", "MORTGAGE", "CHECK", "CARINSURANCE",
+				"DENTALINSURANCE", "HOUSE" };
+		
+		LineNumberReader lineNum = new LineNumberReader(new FileReader("csvFile"));
+		String line;	
+		Integer amount = 0;
+		Integer amount2 = 0;
+		while ((line = lineNum.readLine()) != null) {
+			String[] lineArray = line.split(",", 3);
+			if (lineArray[0] == "TITHE") {
+				amount.getInteger(lineArray[2]);
+				int total = amount + amount2;
+				amount2.equals(total);
+			}
+			else if (lineArray[0] != "TITHE") {
+				continue;				
+			}
+			
+		}
+		System.out.println(amount2);
+		
+		
+	}
 }
