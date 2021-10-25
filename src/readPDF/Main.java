@@ -38,6 +38,9 @@ import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -45,6 +48,8 @@ import javax.swing.JFileChooser;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.GridLayout;
@@ -62,7 +67,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.border.LineBorder;
 
 public class Main {
@@ -124,77 +130,6 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GroupLayout frameLayout = new GroupLayout(frame.getContentPane());
 		frame.getContentPane().setLayout(frameLayout);
-		
-		JButton newBtn = new JButton("Open Statement");
-		newBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				JFileChooser chooser = new JFileChooser();
-		        // optionally set chooser options ...
-		        if (chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-		            File f = chooser.getSelectedFile();
-		            try {
-		            		parseFile(f);
-		            } catch(Exception ex) {
-		            		ex.printStackTrace();
-		            }
-		        } else {
-		            // user changed their mind
-		        }
-			}
-		});
-		
-		JButton catBtn = new JButton("View Categories");
-		catBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				catFrame.setVisible(true);
-				frame.setVisible(false);
-			}
-		});
-		
-		JButton reloadBtn = new JButton("Reload Data");
-		reloadBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					reloadData();
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		
-		JButton saveBtn = new JButton("Save Data");
-		saveBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					save();
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				} catch (DocumentException e1) {
-					e1.printStackTrace();
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		
-
-		JPanel btnPanel = new JPanel();
-		//btnPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		GroupLayout btnLayout = new GroupLayout(btnPanel);
-		btnLayout.setHorizontalGroup(
-			btnLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
-				.addGroup(btnLayout.createSequentialGroup()
-					.addComponent(newBtn)
-					.addComponent(reloadBtn)
-					.addComponent(catBtn)
-					.addComponent(saveBtn)
-				)
-		);
 		
 		summaryLabel = new JLabel("Summary of transactions");
 		summaryLabel.setVisible(false);
@@ -277,7 +212,6 @@ public class Main {
 						.addComponent(balanceLabel)
 					)
 					.addComponent(summaryLabel)
-					.addComponent(btnPanel, GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
 				)
 				.addContainerGap()
 			)
@@ -286,7 +220,7 @@ public class Main {
 		frameLayout.setVerticalGroup(
 			frameLayout.createParallelGroup(GroupLayout.Alignment.LEADING, true)
 			.addGroup(frameLayout.createSequentialGroup()
-				.addComponent(btnPanel, 35, 35, 35)
+				.addGap(5)
 				.addComponent(summaryLabel)
 				.addGap(5)
 				.addComponent(summaryPanel, 100, 100, 100)
@@ -301,10 +235,87 @@ public class Main {
 			)
 		);
 		
+		addMenu();
+		
 		frame.setVisible(true);
 		frame.pack();
 		
 		catFrame = new Category(categoryData, this);
+	}
+	
+	public void addMenu() {
+		JMenuBar bar = new JMenuBar();
+		JMenu file = new JMenu("File");
+		
+		JMenuItem open = new JMenuItem("Open Statement");
+		open.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+		        // optionally set chooser options ...
+		        if (chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+		            File f = chooser.getSelectedFile();
+		            try {
+		            		parseFile(f);
+		            } catch(Exception ex) {
+		            		ex.printStackTrace();
+		            }
+		        } else {
+		            // user changed their mind
+		        }
+			}
+		});
+		
+		
+		JMenuItem save = new JMenuItem("Save To PDF");
+		save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					save();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				} catch (DocumentException e1) {
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		file.add(open);
+		file.add(save);
+		bar.add(file);
+
+		
+		JMenu action = new JMenu("Action");
+		JMenuItem viewCat = new JMenuItem("View Categories");
+		viewCat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				catFrame.setVisible(true);
+				frame.setVisible(false);
+			}
+		});
+		
+		JMenuItem reload = new JMenuItem("Reload Data");
+		reload.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					reloadData();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		action.add(viewCat);
+		action.add(reload);
+		bar.add(action);
+		
+		frame.setJMenuBar(bar);
 	}
 	
 	public void parseFile(File file) throws IOException, ParseException {
