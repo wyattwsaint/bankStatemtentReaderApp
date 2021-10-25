@@ -286,13 +286,11 @@ public class readPDF {
 				continue;				
 			}
 			
-			
 		}
 		
 		System.out.println(amount);
-		
+		amount = 0.0;
 		while ((line = lineNum.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("ENTERTAINMENT")) {
