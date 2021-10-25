@@ -240,6 +240,7 @@ public class readPDF {
 
 		// setData();
 		// gui();
+		parseCSV();
 	}
 
 	public static String setData() {
@@ -264,22 +265,508 @@ public class readPDF {
 				"DENTALINSURANCE", "HOUSE" };
 		
 		LineNumberReader lineNum = new LineNumberReader(new FileReader("csvFile"));
-		String line;	
-		Integer amount = 0;
-		Integer amount2 = 0;
+		String line;
+		Double amount = 0.0;
+		String [] lineArray;
+		String transactionCategory;
+		String trans1;
+		double trans2;
+		double total;
+		
 		while ((line = lineNum.readLine()) != null) {
-			String[] lineArray = line.split(",", 3);
-			if (lineArray[0] == "TITHE") {
-				amount.getInteger(lineArray[2]);
-				int total = amount + amount2;
-				amount2.equals(total);
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("TITHE")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
 			}
 			else if (lineArray[0] != "TITHE") {
 				continue;				
 			}
 			
+			
 		}
-		System.out.println(amount2);
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("ENTERTAINMENT")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "ENTERTAINMENT") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("GAS")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "GAS") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("ELECTRIC")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "ELECTRIC") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("WATER")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "WATER") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("TRASH")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "TRASH") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("ARMYINCOME")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "ARMYINCOME") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("PROGRESSINCOME")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "PROGRESSINCOME") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("ASPENINCOME")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "ASPENINCOME") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("MISC")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "MISC") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("EATOUT")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "EATOUT") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("CAR")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "CAR") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("CITY")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "CITY") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("AMAZON")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "AMAZON") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("RETURNS")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "RETURNS") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("PAYPAL")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "PAYPAL") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("MANDYLIFE")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "MANDYLIFE") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("WYATTLIFE")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "WYATTLIFE") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("TRANSFER")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "TRANSFER") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("GIVING")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "GIVING") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("GROC")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "GROC") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("MORTGAGE")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "MORTGAGE") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("CHECK")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "CHECK") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("CARINSURANCE")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "CARINSURANCE") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("DENTALINSURANCE")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "DENTALINSURANCE") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		while ((line = lineNum.readLine()) != null) {
+			amount = 0.0;
+			lineArray = line.split(",", 3);
+			transactionCategory = lineArray[0];
+			if (transactionCategory.equals("HOUSE")) {
+				trans1 = lineArray[2];
+				trans2 = Double.valueOf(trans1);
+				total = trans2 + amount;
+				amount = total;
+			}
+			else if (lineArray[0] != "HOUSE") {
+				continue;				
+			}
+			
+			
+		}
+		
+		System.out.println(amount);
+		
+		
 		
 		
 	}
