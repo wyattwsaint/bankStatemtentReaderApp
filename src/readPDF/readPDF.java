@@ -289,8 +289,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
+		LineNumberReader lineNum1 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
-		while ((line = lineNum.readLine()) != null) {
+		while ((line = lineNum1.readLine()) != null) {
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("ENTERTAINMENT")) {
@@ -308,7 +309,10 @@ public class readPDF {
 		
 		System.out.println(amount);
 		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum2 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		
+		while ((line = lineNum2.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -326,8 +330,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum3 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum3.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -345,8 +350,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum4 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum4.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -364,8 +370,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum5 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum5.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -383,8 +390,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum6 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum6.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -402,8 +410,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum7 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum7.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -421,8 +430,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum8 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum8.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -440,8 +450,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum9 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum9.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -459,8 +470,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum10 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum10.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -478,8 +490,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum11 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum11.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -497,8 +510,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum12 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum12.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -516,8 +530,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum13 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum13.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -535,8 +550,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum14 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum14.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -554,8 +570,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum15 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum15.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -573,8 +590,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum16 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum16.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -592,8 +610,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum17 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum17.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -611,8 +630,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum18 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum18.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -630,8 +650,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum19 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum19.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -649,8 +670,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum20 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum20.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -668,8 +690,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum21 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum21.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -687,8 +710,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum22 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum22.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -706,8 +730,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum23 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum23.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -725,8 +750,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum24 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum24.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
@@ -744,8 +770,9 @@ public class readPDF {
 		}
 		
 		System.out.println(amount);
-		
-		while ((line = lineNum.readLine()) != null) {
+		LineNumberReader lineNum25 = new LineNumberReader(new FileReader("csvFile"));
+		amount = 0.0;
+		while ((line = lineNum25.readLine()) != null) {
 			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
