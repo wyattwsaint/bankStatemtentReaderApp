@@ -39,8 +39,38 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import com.itextpdf.text.Font;
 
 public class readPDF {
-
-	public static String data;
+	
+	
+	public static double tithe;
+	public static double entertainment;
+	public static double gas;
+	public static double electric;
+	public static double water;
+	public static double trash;
+	public static double army;
+	public static double progress;
+	public static double aspen;
+	public static double misc;
+	public static double eatout;
+	public static double car;
+	public static double city;
+	public static double amazon;
+	public static double returns;
+	public static double paypal;
+	public static double mlife;
+	public static double wlife;
+	public static double transfer;
+	public static double giving;
+	public static double groc;
+	public static double mortgage;
+	public static double check;
+	public static double carins;
+	public static double dentalins;
+	public static double house;
+	
+	public static double[] data = {tithe, entertainment, gas, electric, water, trash, army, progress, aspen, misc,
+			eatout, car, city, amazon, returns, paypal, mlife, wlife, transfer, giving, groc, mortgage, check, carins,
+			dentalins, house};
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -53,7 +83,6 @@ public class readPDF {
 		bw.flush();
 		bw.close();
 
-		readPDF.data = temp;
 
 		BufferedReader buffRead = new BufferedReader(new FileReader("bankData"));
 		BufferedWriter buffWrite = new BufferedWriter(new FileWriter("pdfText"));
@@ -119,10 +148,10 @@ public class readPDF {
 						String dashes = "------------------------------------------------------------";
 						String[] trans10 = transNamePlusPrice.split("/", 4);
 						String trans11 = trans10[0];
-						String trans12 = trans11 + dashes;
+						String trans12 = trans11.replaceAll(",", "") + dashes;
 
 						String trans13 = trans12.substring(0, 40);
-						String trans14 = trans10[3].substring(3);
+						String trans14 = trans10[3].substring(3).replaceAll(",", "");
 
 						// System.out.println(trans13);
 						// System.out.println("Enter category");
@@ -143,9 +172,9 @@ public class readPDF {
 						String dashes = "------------------------------------------------------------";
 						String[] tran = transNamePlusPrice.split("/", 3);
 						String tran1 = tran[0];
-						String tran2 = tran1 + dashes;
+						String tran2 = tran1.replaceAll(",", "") + dashes;
 						String tran3 = tran2.substring(0, 40);
-						String tran4 = tran[2].substring(3);
+						String tran4 = tran[2].substring(3).replaceAll(",", "");
 
 						// System.out.println(tran3);
 						// System.out.println("Enter category");
@@ -166,9 +195,9 @@ public class readPDF {
 						String dashes = "------------------------------------------------------------";
 						String[] trans1 = transNamePlusPrice.split("/", 2);
 						String trans2 = trans1[0];
-						String trans3 = trans2 + dashes;
+						String trans3 = trans2.replaceAll(",", "") + dashes;
 						String trans4 = trans3.substring(0, 40);
-						String trans5 = trans1[1].substring(3);
+						String trans5 = trans1[1].substring(3).replaceAll(",", "");
 
 						// System.out.println(trans4);
 						// System.out.println("Enter category");
@@ -197,10 +226,10 @@ public class readPDF {
 							String priceLine = Files.readAllLines(Paths.get("bankData")).get(newLineNumber - 1);
 							BufferedWriter priceTemp = new BufferedWriter(new FileWriter("priceTemp"));
 
-							String data22 = data.replaceAll(":", "") + dashes;
+							String data22 = data.replaceAll(":", "").replaceAll(",", "") + dashes;
 							String data33 = data22.substring(0, 40);
 							String[] data44 = priceLine.split("/", 2);
-							String data55 = data44[1].substring(3);
+							String data55 = data44[1].substring(3).replaceAll(",", "");
 
 							// System.out.println(data33);
 							// System.out.println("Enter category");
@@ -238,14 +267,14 @@ public class readPDF {
 		}
 		properties.store(new FileOutputStream("data.properties"), null);
 
-		// setData();
-		// gui();
 		parseCSV();
+		setData();
+		gui();
 	}
 
-	public static String setData() {
+	public static double[] setData() {
 
-		String data = readPDF.data;
+		double[] data = readPDF.data;
 		return data;
 
 	}
@@ -274,6 +303,7 @@ public class readPDF {
 		double total;
 		
 		while ((line = lineNum.readLine()) != null) {
+			
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("TITHE")) {
@@ -281,14 +311,15 @@ public class readPDF {
 				trans2 = Double.valueOf(trans1);
 				total = trans2 + amount;
 				amount = total;
+				
 			}
 			else if (lineArray[0] != "TITHE") {
 				continue;				
 			}
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.tithe = amount;		
+		System.out.println("Tithe" + amount);
 		LineNumberReader lineNum1 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum1.readLine()) != null) {
@@ -306,14 +337,13 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.entertainment = amount;
+		System.out.println("Entertainment" + amount);
 		
 		LineNumberReader lineNum2 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		
 		while ((line = lineNum2.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("GAS")) {
@@ -328,12 +358,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.gas = amount;
+		System.out.println("gas" + amount);
 		LineNumberReader lineNum3 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum3.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("ELECTRIC")) {
@@ -348,12 +377,13 @@ public class readPDF {
 			
 			
 		}
+		readPDF.electric = amount;
+		System.out.println("elec" + amount);
 		
-		System.out.println(amount);
+				
 		LineNumberReader lineNum4 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum4.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("WATER")) {
@@ -368,12 +398,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.water = amount;
+		System.out.println("water" + amount);
 		LineNumberReader lineNum5 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum5.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("TRASH")) {
@@ -388,16 +417,15 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.trash = amount;
+		System.out.println("trash" + amount);
 		LineNumberReader lineNum6 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum6.readLine()) != null) {
-			amount = 0.0;
-			lineArray = line.split(",", 3);
+			lineArray = line.split(",", 4);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("ARMYINCOME")) {
-				trans1 = lineArray[2];
+				trans1 = lineArray[3];
 				trans2 = Double.valueOf(trans1);
 				total = trans2 + amount;
 				amount = total;
@@ -408,12 +436,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.army = amount;
+		System.out.println("army" + amount);
 		LineNumberReader lineNum7 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum7.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("PROGRESSINCOME")) {
@@ -428,12 +455,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.progress = amount;
+		System.out.println("Progress" + amount);
 		LineNumberReader lineNum8 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum8.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("ASPENINCOME")) {
@@ -448,12 +474,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.aspen = amount;
+		System.out.println("aspen" + amount);
 		LineNumberReader lineNum9 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum9.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("MISC")) {
@@ -468,12 +493,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.misc = amount;
+		System.out.println("misc" + amount);
 		LineNumberReader lineNum10 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum10.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("EATOUT")) {
@@ -488,12 +512,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.eatout = amount;
+		System.out.println("eatout" + amount);
 		LineNumberReader lineNum11 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum11.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("CAR")) {
@@ -508,12 +531,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.car = amount;
+		System.out.println("Car" + amount);
 		LineNumberReader lineNum12 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum12.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("CITY")) {
@@ -528,12 +550,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.city = amount;
+		System.out.println("City" + amount);
 		LineNumberReader lineNum13 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum13.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("AMAZON")) {
@@ -548,12 +569,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.amazon = amount;
+		System.out.println("Amazon" + amount);
 		LineNumberReader lineNum14 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum14.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("RETURNS")) {
@@ -568,12 +588,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.returns = amount;
+		System.out.println("Returns" + amount);
 		LineNumberReader lineNum15 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum15.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("PAYPAL")) {
@@ -588,12 +607,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.paypal = amount;
+		System.out.println("Paypal" + amount);
 		LineNumberReader lineNum16 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum16.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("MANDYLIFE")) {
@@ -608,12 +626,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.mlife = amount;
+		System.out.println("MLife" + amount);
 		LineNumberReader lineNum17 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum17.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("WYATTLIFE")) {
@@ -628,12 +645,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.wlife = amount;
+		System.out.println("WLife" + amount);
 		LineNumberReader lineNum18 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum18.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("TRANSFER")) {
@@ -648,12 +664,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.transfer = amount;
+		System.out.println("Transfer" + amount);
 		LineNumberReader lineNum19 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum19.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("GIVING")) {
@@ -666,14 +681,12 @@ public class readPDF {
 				continue;				
 			}
 			
-			
 		}
-		
-		System.out.println(amount);
+		readPDF.giving = amount;
+		System.out.println("Give" + amount);
 		LineNumberReader lineNum20 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum20.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("GROC")) {
@@ -688,12 +701,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.groc = amount;
+		System.out.println("Groc" + amount);
 		LineNumberReader lineNum21 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum21.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("MORTGAGE")) {
@@ -708,12 +720,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.mortgage = amount;
+		System.out.println("Mort" + amount);
 		LineNumberReader lineNum22 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum22.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("CHECK")) {
@@ -728,12 +739,11 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.check = amount;
+		System.out.println("Check" + amount);
 		LineNumberReader lineNum23 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum23.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("CARINSURANCE")) {
@@ -748,32 +758,32 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.carins = amount;
+		System.out.println("Car" + amount);
 		LineNumberReader lineNum24 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum24.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
-			if (transactionCategory.equals("DENTALINSURANCE")) {
+			if (transactionCategory.equals("DENTALINS")) {
 				trans1 = lineArray[2];
 				trans2 = Double.valueOf(trans1);
 				total = trans2 + amount;
 				amount = total;
 			}
-			else if (lineArray[0] != "DENTALINSURANCE") {
+			else if (lineArray[0] != "DENTALINS") {
 				continue;				
 			}
 			
 			
 		}
 		
-		System.out.println(amount);
+		readPDF.dentalins = amount;
+		System.out.println("Dental" + amount);
+		
 		LineNumberReader lineNum25 = new LineNumberReader(new FileReader("csvFile"));
 		amount = 0.0;
 		while ((line = lineNum25.readLine()) != null) {
-			amount = 0.0;
 			lineArray = line.split(",", 3);
 			transactionCategory = lineArray[0];
 			if (transactionCategory.equals("HOUSE")) {
@@ -788,8 +798,8 @@ public class readPDF {
 			
 			
 		}
-		
-		System.out.println(amount);
+		readPDF.house = amount;
+		System.out.println("House" + amount);
 		
 		
 		
