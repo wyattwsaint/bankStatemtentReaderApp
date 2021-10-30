@@ -144,7 +144,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel6.setText("Entertain");
         String entertain1 = String.valueOf(readPDF.entertainment);
-        jLabel1.setText(entertain1);
+        jLabel3.setText(entertain1);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -173,7 +173,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel8.setText("Progress");
         String progress1 = String.valueOf(readPDF.progress);
-        jLabel1.setText(progress1);
+        jLabel34.setText(progress1);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -202,7 +202,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel7.setText("Army Income");
         String army1 = String.valueOf(readPDF.army);
-        jLabel1.setText(army1);
+        jLabel36.setText(army1);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -231,7 +231,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel10.setText("Amazon");
         String amazon1 = String.valueOf(readPDF.amazon);
-        jLabel1.setText(amazon1);
+        jLabel43.setText(amazon1);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -264,7 +264,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel9.setText("City");
         String city1 = String.valueOf(readPDF.city);
-        jLabel1.setText(city1);
+        jLabel42.setText(city1);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -297,7 +297,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel11.setText("Transfers");
         String transfer1 = String.valueOf(readPDF.transfer);
-        jLabel1.setText(transfer1);
+        jLabel49.setText(transfer1);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -330,7 +330,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel12.setText("Giving");
         String giving1 = String.valueOf(readPDF.giving);
-        jLabel1.setText(giving1);
+        jLabel48.setText(giving1);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -359,7 +359,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel14.setText("Car Insure");
         String carins1 = String.valueOf(readPDF.carins);
-        jLabel1.setText(carins1);
+        jLabel51.setText(carins1);
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -388,7 +388,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel13.setText("Checks");
         String checks1 = String.valueOf(readPDF.check);
-        jLabel1.setText(checks1);
+        jLabel52.setText(checks1);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -417,7 +417,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel16.setText("Gas");
         String gas1 = String.valueOf(readPDF.gas);
-        jLabel1.setText(gas1);
+        jLabel2.setText(gas1);
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -446,7 +446,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel15.setText("Electric");
         String electric1 = String.valueOf(readPDF.electric);
-        jLabel1.setText(electric1);
+        jLabel33.setText(electric1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -475,7 +475,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel18.setText("Misc");
         String misc1 = String.valueOf(readPDF.misc);
-        jLabel1.setText(misc1);
+        jLabel39.setText(misc1);
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -504,7 +504,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel17.setText("Aspen");
         String aspen1 = String.valueOf(readPDF.aspen);
-        jLabel1.setText(aspen1);
+        jLabel38.setText(aspen1);
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
@@ -533,7 +533,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel19.setText("Paypal");
         String paypal1 = String.valueOf(readPDF.paypal);
-        jLabel1.setText(paypal1);
+        jLabel45.setText(paypal1);
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -566,7 +566,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel20.setText("Returns");
         String returns1 = String.valueOf(readPDF.returns);
-        jLabel1.setText(returns1);
+        jLabel44.setText(returns1);
 
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
@@ -599,7 +599,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel22.setText("Grocery");
         String groc1 = String.valueOf(readPDF.groc);
-        jLabel1.setText(groc1);
+        jLabel50.setText(groc1);
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
@@ -632,7 +632,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel21.setText("Mortgage");
         String mortgage1 = String.valueOf(readPDF.mortgage);
-        jLabel1.setText(mortgage1);
+        jLabel41.setText(mortgage1);
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
@@ -661,7 +661,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel24.setText("House");
         String house1 = String.valueOf(readPDF.house);
-        jLabel1.setText(house1);
+        jLabel54.setText(house1);
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -690,7 +690,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel23.setText("Dental Ins");
         String dental1 = String.valueOf(readPDF.dentalins);
-        jLabel1.setText(dental1);
+        jLabel53.setText(dental1);
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
@@ -719,7 +719,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel26.setText("Water");
         String water1 = String.valueOf(readPDF.water);
-        jLabel1.setText(water1);
+        jLabel32.setText(water1);
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
@@ -748,7 +748,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel25.setText("Trash");
         String trash1 = String.valueOf(readPDF.trash);
-        jLabel1.setText(trash1);
+        jLabel35.setText(trash1);
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
@@ -781,7 +781,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel28.setText("Car");
         String car1 = String.valueOf(readPDF.car);
-        jLabel1.setText(car1);
+        jLabel40.setText(car1);
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
@@ -808,7 +808,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel27.setText("Eat Out");
         String eatout1 = String.valueOf(readPDF.eatout);
-        jLabel1.setText(eatout1);
+        jLabel37.setText(eatout1);
 
         javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
         jPanel25.setLayout(jPanel25Layout);
@@ -837,7 +837,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel30.setText("M Life Insure");
         String mlife1 = String.valueOf(readPDF.mlife);
-        jLabel1.setText(mlife1);
+        jLabel46.setText(mlife1);
 
         javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
         jPanel28.setLayout(jPanel28Layout);
@@ -870,7 +870,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel29.setText("W Life Insur");
         String wlife1 = String.valueOf(readPDF.wlife);
-        jLabel1.setText(wlife1);
+        jLabel47.setText(wlife1);
 
         javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
         jPanel27.setLayout(jPanel27Layout);
